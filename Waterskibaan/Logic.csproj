@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="IMoves.cs" />
     <Compile Include="Kabel.cs" />
+    <Compile Include="Lijn.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Skies.cs" />

@@ -1,12 +1,63 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Waterskibaan
 {
-    class Kabel
+    public class Kabel
     {
+        private LinkedList<Lijn> _lijnen = new LinkedList<Lijn>();
+
+        public bool IsStartPositieLeeg()
+        {
+            if (_lijnen.Count == 0 || _lijnen.First().PositieOpDeKabel != 0) return true;
+
+            return false;
+        }
+
+        public void NeemLijnInGebruik(Lijn lijn)
+        {
+            if (IsStartPositieLeeg())
+            {
+                _lijnen.AddFirst(lijn);
+            }
+        }
+
+        public void VerschuifLijnen()
+        {
+            foreach (Lijn lijn in _lijnen)
+            {
+                lijn.PositieOpDeKabel = lijn.PositieOpDeKabel < 9 ? lijn.PositieOpDeKabel + 1 : 0;
+            }
+        }
+
+        public Lijn VerwijderLijnVanKabel()
+        {
+            Lijn found = null;
+
+            foreach (Lijn lijn in _lijnen)
+            {
+                if (lijn.PositieOpDeKabel == 9)
+                {
+                    found = lijn;
+                    break;
+                }
+            }
+
+            return found;
+        }
+
+        public override string ToString()
+        {
+            if (_lijnen.Count == 0) return "";
+
+            string result = "";
+
+            foreach (Lijn lijn in _lijnen)
+            {
+                result += $"{lijn.PositieOpDeKabel}|";
+            }
+
+            return result.Substring(0, result.Length - 1);
+        }
     }
 }
