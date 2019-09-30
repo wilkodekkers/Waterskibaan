@@ -1,4 +1,6 @@
-﻿namespace Waterskibaan
+﻿using System;
+
+namespace Waterskibaan
 {
     class Program
     {
