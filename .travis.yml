@@ -1,4 +1,0 @@
-language: csharp
-solution: Waterskibaan.sln
-script:
-  - xbuild /p:Configuration=Release Waterskibaan.sln
