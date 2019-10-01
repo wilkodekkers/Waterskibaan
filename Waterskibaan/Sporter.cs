@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace Waterskibaan
 {
-    class Sporter
+    public class Sporter
     {
         private int _aantalRondenNogTeGaan;
         private Zwemvest _zwemvest;

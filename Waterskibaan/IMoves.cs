@@ -1,6 +1,6 @@
 ﻿namespace Waterskibaan
 {
-    interface IMoves
+    public interface IMoves
     {
         int Move();
     }

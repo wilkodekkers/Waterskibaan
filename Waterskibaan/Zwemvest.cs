@@ -1,6 +1,6 @@
 ﻿namespace Waterskibaan
 {
-    class Zwemvest
+    public class Zwemvest
     {
     }
 }

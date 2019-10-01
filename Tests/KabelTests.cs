@@ -33,7 +33,12 @@ namespace Tests
         public void TestVerwijderLijnVanKabel()
         {
             Lijn lijn = new Lijn();
+            Sporter sporter = new Sporter(MoveCollection.GetWillekeurigeMoves());
             Kabel kabel = new Kabel();
+
+            sporter.AantalRondenNogTeGaan = 1;
+
+            lijn.Sporter = sporter;
 
             kabel.NeemLijnInGebruik(lijn);
             kabel.VerschuifLijnen();

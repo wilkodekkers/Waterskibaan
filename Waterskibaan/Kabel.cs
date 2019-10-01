@@ -26,7 +26,15 @@ namespace Waterskibaan
         {
             foreach (Lijn lijn in _lijnen)
             {
-                lijn.PositieOpDeKabel = lijn.PositieOpDeKabel < 9 ? lijn.PositieOpDeKabel + 1 : 0;
+                if (lijn.PositieOpDeKabel == 9)
+                {
+                    lijn.Sporter.AantalRondenNogTeGaan--;
+                    lijn.PositieOpDeKabel = 0;
+                }
+                else
+                {
+                    lijn.PositieOpDeKabel++;
+                }
             }
         }
 
@@ -36,7 +44,7 @@ namespace Waterskibaan
 
             foreach (Lijn lijn in _lijnen)
             {
-                if (lijn.PositieOpDeKabel == 9)
+                if (lijn.PositieOpDeKabel == 9 && lijn.Sporter.AantalRondenNogTeGaan == 1)
                 {
                     found = lijn;
                     break;

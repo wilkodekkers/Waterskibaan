@@ -6,6 +6,6 @@
         private Sporter _sporter;
 
         public int PositieOpDeKabel { get => _positieOpDeKabel; set => _positieOpDeKabel = value; }
-        internal Sporter Sporter { get => _sporter; set => _sporter = value; }
+        public Sporter Sporter { get => _sporter; set => _sporter = value; }
     }
 }
