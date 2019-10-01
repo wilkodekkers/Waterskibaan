@@ -8,6 +8,6 @@ namespace Waterskibaan
 {
     class WachtrijStarten : Wachtrij
     {
-        public override int MaxLengteRij => 100;
+        public override int MaxLengteRij => 20;
     }
 }

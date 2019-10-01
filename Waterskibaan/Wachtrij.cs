@@ -48,5 +48,10 @@ namespace Waterskibaan
 
             return sporters;
         }
+
+        public override string ToString()
+        {
+            return $"Wachtrij: {_queue.Count} sporters";
+        }
     }
 }
