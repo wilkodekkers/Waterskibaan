@@ -31,6 +31,16 @@ namespace Waterskibaan
             }
         }
 
+        public void SporterStart(Sporter sp)
+        {
+            if (!_kabel.IsStartPositieLeeg()) return;
+
+            Lijn lijn = _lijnen.VerwijderEersteLijn();
+            lijn.Sporter = sp;
+            lijn.Sporter.AantalRondenNogTeGaan = new Random().Next(1, 3);
+            _kabel.NeemLijnInGebruik(lijn);
+        }
+
         public override string ToString()
         {
             return $"{_lijnen} | {_kabel}";
