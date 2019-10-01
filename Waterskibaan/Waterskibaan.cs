@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Waterskibaan
 {
-    class Waterskibaan
+    public class Waterskibaan
     {
         private Kabel _kabel = new Kabel();
         private LijnenVoorraad _lijnen = new LijnenVoorraad();
@@ -33,6 +33,8 @@ namespace Waterskibaan
 
         public void SporterStart(Sporter sp)
         {
+            if (sp.Skies == null || sp.Zwemvest == null) throw new Exception("Een sporter heeft skies en een zwemvest nodig!");
+
             if (!_kabel.IsStartPositieLeeg()) return;
 
             Lijn lijn = _lijnen.VerwijderEersteLijn();
