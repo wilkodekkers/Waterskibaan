@@ -71,6 +71,7 @@ namespace Waterskibaan
         {
             _elapsed++;
 
+            Console.Clear();
             Console.WriteLine(_waterskibaan);
             Console.WriteLine(_wachtrijInstrucie);
             Console.WriteLine(_instructieGroep);
@@ -104,6 +105,14 @@ namespace Waterskibaan
             if (_elapsed % 4 != 0) return;
 
             _waterskibaan.VerplaatsKabel();
+
+            if (_wachtrijStarten.GetAlleSporters().Count == 0) return;
+
+            Sporter sporter = _wachtrijStarten.SportersVerlatenRij(1)[0];
+            sporter.Skies = new Skies();
+            sporter.Zwemvest = new Zwemvest();
+
+            _waterskibaan.SporterStart(sporter);
         }
     }
 }
