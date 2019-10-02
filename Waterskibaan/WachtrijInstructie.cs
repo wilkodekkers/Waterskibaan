@@ -4,12 +4,7 @@
     {
         public override int MaxLengteRij => 100;
 
-        public WachtrijInstructie(Game game)
-        {
-            game.NieuweBezoeker += OnNieuweBezoeker;
-        }
-
-        private void OnNieuweBezoeker(NieuweBezoekerArgs args)
+        public void OnNieuweBezoeker(NieuweBezoekerArgs args)
         {
             SporterNeemPlaatsInRij(args.Sporter);
         }

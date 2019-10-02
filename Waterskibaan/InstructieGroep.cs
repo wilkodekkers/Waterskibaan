@@ -4,14 +4,9 @@
     {
         public override int MaxLengteRij => 5;
 
-        public InstructieGroep(Game game)
+        public void OnInstructieAfgelopen(InstructieAfgelopenArgs args)
         {
-            game.InstructieAfgelopen += OnInstructieAfgelopen;
-        }
-
-        private void OnInstructieAfgelopen(InstructieAfgelopenArgs args)
-        {
-            foreach (Sporter sporter in args.Sporters)
+            foreach (Sporter sporter in args.SportersNieuw)
             {
                 SporterNeemPlaatsInRij(sporter);
             }

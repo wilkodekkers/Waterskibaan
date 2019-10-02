@@ -39,7 +39,7 @@ namespace Waterskibaan
 
             List<Sporter> sporters = new List<Sporter>();
 
-            int amount = aantal < _queue.Count ? aantal : aantal - _queue.Count;
+            int amount = aantal <= _queue.Count ? aantal : aantal - _queue.Count;
 
             for (int i = 0; i < amount; i++)
             {
