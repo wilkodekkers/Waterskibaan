@@ -5,8 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="MainWindow" Height="700" Width="1200">
+    <Grid x:Name="grid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Canvas HorizontalAlignment="Left" Height="669" VerticalAlignment="Top" Width="596" Background="#FF6DA3CF" />
+        <Label x:Name="label" Content="Waterskibaan Data" Grid.Column="1" Margin="55,10,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" Height="31" Width="152"/>
+
     </Grid>
 </Window>
