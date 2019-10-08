@@ -21,10 +21,9 @@ namespace Waterskibaan
 
     public class Game
     {
-        private Timer _timer;
-        private int _elapsed;
+        public int TimeElapsed;
 
-        private Waterskibaan _waterskibaan = new Waterskibaan();
+        private Waterskibaan _waterskibaan;
         private WachtrijInstructie _wachtrijInstrucie;
         private InstructieGroep _instructieGroep;
         private WachtrijStarten _wachtrijStarten;
@@ -37,6 +36,7 @@ namespace Waterskibaan
 
         public Game()
         {
+            _waterskibaan = new Waterskibaan();
             _wachtrijInstrucie = new WachtrijInstructie();
             _instructieGroep = new InstructieGroep();
             _wachtrijStarten = new WachtrijStarten();
@@ -56,7 +56,7 @@ namespace Waterskibaan
 
         private void OnTimerElapsed(object source, EventArgs e)
         {
-            _elapsed++;
+            TimeElapsed++;
 
             Console.WriteLine(_waterskibaan);
             Console.WriteLine(_wachtrijInstrucie);
@@ -66,7 +66,7 @@ namespace Waterskibaan
 
         private void OnNieuweBezoeker(object source, EventArgs e)
         {
-            if (_elapsed % 3 != 0) return;
+            if (TimeElapsed % 3 != 0) return;
 
             Sporter sporter = new Sporter(MoveCollection.GetWillekeurigeMoves());
             NieuweBezoekerArgs args = new NieuweBezoekerArgs();
@@ -77,7 +77,7 @@ namespace Waterskibaan
 
         private void OnInstructieAfgelopen(object source, EventArgs e)
         {
-            if (_elapsed % 20 != 0) return;
+            if (TimeElapsed % 20 != 0) return;
 
             InstructieAfgelopenArgs args = new InstructieAfgelopenArgs();
             args.SportersKlaar = _instructieGroep.SportersVerlatenRij(5);
@@ -88,7 +88,7 @@ namespace Waterskibaan
 
         private void OnLijnenVerplaats(object source, EventArgs e)
         {
-            if (_elapsed % 4 != 0) return;
+            if (TimeElapsed % 4 != 0) return;
 
             _waterskibaan.VerplaatsKabel();
 
@@ -99,6 +99,11 @@ namespace Waterskibaan
             sporter.Zwemvest = new Zwemvest();
 
             _waterskibaan.SporterStart(sporter);
+        }
+
+        public override string ToString()
+        {
+            return $"{_waterskibaan.ToString()}";
         }
     }
 }

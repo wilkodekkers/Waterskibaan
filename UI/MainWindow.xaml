@@ -11,7 +11,7 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Canvas HorizontalAlignment="Left" Height="669" VerticalAlignment="Top" Width="596" Background="#FF6DA3CF" />
+        <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="669" VerticalAlignment="Top" Width="596" Background="#FF6DA3CF" />
         <Label x:Name="label" Content="Waterskibaan Data" Grid.Column="1" Margin="55,10,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" Height="31" Width="152"/>
 
     </Grid>

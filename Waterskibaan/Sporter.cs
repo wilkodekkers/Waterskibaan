@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Windows.Media;
 
 namespace Waterskibaan
 {
@@ -25,7 +25,9 @@ namespace Waterskibaan
             Moves = moves;
 
             Random random = new Random();
-            KledingKleur = Color.FromArgb(random.Next(0, 256), random.Next(0, 256), random.Next(0, 256));
+            byte[] b = new byte[3];
+            random.NextBytes(b);
+            KledingKleur = Color.FromRgb(b[0], b[1], b[2]);
         }
     }
 }
