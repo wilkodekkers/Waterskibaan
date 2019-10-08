@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Threading;
+using Waterskibaan;
 
 namespace UI
 {
@@ -20,9 +10,28 @@ namespace UI
     /// </summary>
     public partial class MainWindow : Window
     {
+        private DispatcherTimer DispatcherTimer;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            Game game = new Game();
+
+            DispatcherTimer = new DispatcherTimer(DispatcherPriority.Normal)
+            {
+                Interval = TimeSpan.FromMilliseconds(35)
+            };
+
+            game.Initialize(DispatcherTimer);
+
+            DispatcherTimer.Tick += TimerEvent;
+            DispatcherTimer.Start();
+        }
+
+        private void TimerEvent(object sender, EventArgs e)
+        {
+            // Update UI
         }
     }
 }

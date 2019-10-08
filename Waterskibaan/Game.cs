@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Windows.Threading;
 
 namespace Waterskibaan
 {
@@ -41,44 +42,29 @@ namespace Waterskibaan
             _wachtrijStarten = new WachtrijStarten();
         }
 
-        public void Initialize()
+        public void Initialize(DispatcherTimer timer)
         {
-            SetupTimer();
-
             NieuweBezoeker += _wachtrijInstrucie.OnNieuweBezoeker;
             InstructieAfgelopen += _instructieGroep.OnInstructieAfgelopen;
             InstructieAfgelopen += _wachtrijStarten.OnInstructieAfgelopen;
 
-            Console.WriteLine("Press enter to quit...");
-            Console.ReadLine();
-
-            _timer.Stop();
-            _timer.Dispose();
+            timer.Tick += OnTimerElapsed;
+            timer.Tick += OnNieuweBezoeker;
+            timer.Tick += OnInstructieAfgelopen;
+            timer.Tick += OnLijnenVerplaats;
         }
 
-        private void SetupTimer()
-        {
-            _timer = new Timer(1000);
-            _timer.Elapsed += OnTimerElapsed;
-            _timer.Elapsed += OnNieuweBezoeker;
-            _timer.Elapsed += OnInstructieAfgelopen;
-            _timer.Elapsed += OnLijnenVerplaats;
-            _timer.AutoReset = true;
-            _timer.Enabled = true;
-        }
-
-        private void OnTimerElapsed(object source, ElapsedEventArgs e)
+        private void OnTimerElapsed(object source, EventArgs e)
         {
             _elapsed++;
 
-            Console.Clear();
             Console.WriteLine(_waterskibaan);
             Console.WriteLine(_wachtrijInstrucie);
             Console.WriteLine(_instructieGroep);
             Console.WriteLine(_wachtrijStarten);
         }
 
-        private void OnNieuweBezoeker(object source, ElapsedEventArgs e)
+        private void OnNieuweBezoeker(object source, EventArgs e)
         {
             if (_elapsed % 3 != 0) return;
 
@@ -89,7 +75,7 @@ namespace Waterskibaan
             NieuweBezoeker?.Invoke(args);
         }
 
-        private void OnInstructieAfgelopen(object source, ElapsedEventArgs e)
+        private void OnInstructieAfgelopen(object source, EventArgs e)
         {
             if (_elapsed % 20 != 0) return;
 
@@ -100,7 +86,7 @@ namespace Waterskibaan
             InstructieAfgelopen?.Invoke(args);
         }
 
-        private void OnLijnenVerplaats(object source, ElapsedEventArgs e)
+        private void OnLijnenVerplaats(object source, EventArgs e)
         {
             if (_elapsed % 4 != 0) return;
 
