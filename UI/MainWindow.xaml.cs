@@ -7,11 +7,6 @@ using System.Windows.Threading;
 using System.Collections.Generic;
 using Waterskibaan;
 
-using ToastNotifications;
-using ToastNotifications.Lifetime;
-using ToastNotifications.Position;
-using ToastNotifications.Messages;
-
 namespace UI
 {
     /// <summary>
@@ -25,21 +20,6 @@ namespace UI
         private readonly LinkedList<Sporter> NewSporters = new LinkedList<Sporter>();
         private readonly LinkedList<Sporter> FinishedSporters = new LinkedList<Sporter>();
 
-        private readonly Notifier notifier = new Notifier(cfg =>
-        {
-            cfg.PositionProvider = new WindowPositionProvider(
-                parentWindow: Application.Current.MainWindow,
-                corner: Corner.BottomRight,
-                offsetX: 10,
-                offsetY: 10);
-
-            cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
-                notificationLifetime: TimeSpan.FromSeconds(3),
-                maximumNotificationCount: MaximumNotificationCount.FromCount(5));
-
-            cfg.Dispatcher = Application.Current.Dispatcher;
-        });
-
         public MainWindow()
         {
             InitializeComponent();
@@ -48,7 +28,7 @@ namespace UI
 
             DispatcherTimer = new DispatcherTimer(DispatcherPriority.Normal)
             {
-                Interval = TimeSpan.FromMilliseconds(250)
+                Interval = TimeSpan.FromMilliseconds(1000)
             };
 
             Game.NieuweBezoeker += OnNieuweBezoeker;
@@ -78,8 +58,6 @@ namespace UI
         private void OnNieuweBezoeker(NieuweBezoekerArgs e)
         {
             NewVisitors.AddLast(e.Sporter);
-
-            notifier.ShowSuccess("New Visitor joined the queue");
         }
 
         private void TimerEvent(object sender, EventArgs e)
