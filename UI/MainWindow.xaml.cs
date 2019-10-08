@@ -7,6 +7,11 @@ using System.Windows.Threading;
 using System.Collections.Generic;
 using Waterskibaan;
 
+using ToastNotifications;
+using ToastNotifications.Lifetime;
+using ToastNotifications.Position;
+using ToastNotifications.Messages;
+
 namespace UI
 {
     /// <summary>
@@ -17,6 +22,21 @@ namespace UI
         private readonly DispatcherTimer DispatcherTimer;
         private readonly Game Game;
         private readonly LinkedList<Sporter> NewVisitors = new LinkedList<Sporter>();
+
+        private Notifier notifier = new Notifier(cfg =>
+        {
+            cfg.PositionProvider = new WindowPositionProvider(
+                parentWindow: Application.Current.MainWindow,
+                corner: Corner.BottomRight,
+                offsetX: 10,
+                offsetY: 10);
+
+            cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+                notificationLifetime: TimeSpan.FromSeconds(3),
+                maximumNotificationCount: MaximumNotificationCount.FromCount(5));
+
+            cfg.Dispatcher = Application.Current.Dispatcher;
+        });
 
         public MainWindow()
         {
@@ -40,6 +60,8 @@ namespace UI
         private void OnNieuweBezoeker(NieuweBezoekerArgs e)
         {
             NewVisitors.AddFirst(e.Sporter);
+
+            notifier.ShowSuccess("New Visitor joined the queue");
         }
 
         private void TimerEvent(object sender, EventArgs e)
@@ -48,30 +70,36 @@ namespace UI
 
             foreach (Sporter sporter in NewVisitors)
             {
-                // Draw new visitor
-                Color color = sporter.KledingKleur;
-                SolidColorBrush fillBrush = new SolidColorBrush(color);
-                SolidColorBrush strokeBrush = new SolidColorBrush(Colors.Black);
+                int offset = 25 * count;
 
-                Rectangle leftEllipse = new Rectangle
-                {
-                    Stroke = strokeBrush,
-                    Fill = fillBrush,
-                    Height = 20,
-                    Width = 20,
-                    RadiusX = 5,
-                    RadiusY = 5
-                };
-
-                Canvas.SetTop(leftEllipse, 5 + (25 * count));
-                Canvas.SetLeft(leftEllipse, 5);
-
-                canvas.Children.Add(leftEllipse);
+                DrawNewVisitor(sporter, offset);
 
                 count++;
             }
 
             label.Content = Game.ToString();
+        }
+
+        private void DrawNewVisitor(Sporter sporter, int offset)
+        {
+            Color color = sporter.KledingKleur;
+            SolidColorBrush fillBrush = new SolidColorBrush(color);
+            SolidColorBrush strokeBrush = new SolidColorBrush(Colors.Black);
+
+            Rectangle leftEllipse = new Rectangle
+            {
+                Stroke = strokeBrush,
+                Fill = fillBrush,
+                Height = 20,
+                Width = 20,
+                RadiusX = 5,
+                RadiusY = 5
+            };
+
+            Canvas.SetTop(leftEllipse, 5 + offset);
+            Canvas.SetLeft(leftEllipse, 5);
+
+            canvas.Children.Add(leftEllipse);
         }
     }
 }
