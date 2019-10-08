@@ -23,7 +23,7 @@ namespace UI
         private readonly Game Game;
         private readonly LinkedList<Sporter> NewVisitors = new LinkedList<Sporter>();
 
-        private Notifier notifier = new Notifier(cfg =>
+        private readonly Notifier notifier = new Notifier(cfg =>
         {
             cfg.PositionProvider = new WindowPositionProvider(
                 parentWindow: Application.Current.MainWindow,
@@ -59,13 +59,32 @@ namespace UI
 
         private void OnNieuweBezoeker(NieuweBezoekerArgs e)
         {
-            NewVisitors.AddFirst(e.Sporter);
+            NewVisitors.AddLast(e.Sporter);
 
             notifier.ShowSuccess("New Visitor joined the queue");
         }
 
         private void TimerEvent(object sender, EventArgs e)
         {
+            DrawNewVisitorQueue();
+
+            label.Content = Game.ToString();
+        }
+
+        private void DrawNewVisitorQueue()
+        {
+            Line fence = new Line
+            {
+                Stroke = new SolidColorBrush(Colors.Black),
+                Fill = new SolidColorBrush(Colors.Black),
+                X1 = 32,
+                X2 = 32,
+                Y1 = 0,
+                Y2 = canvas.Height
+            };
+
+            canvas.Children.Add(fence);
+
             int count = 0;
 
             foreach (Sporter sporter in NewVisitors)
@@ -76,8 +95,6 @@ namespace UI
 
                 count++;
             }
-
-            label.Content = Game.ToString();
         }
 
         private void DrawNewVisitor(Sporter sporter, int offset)
