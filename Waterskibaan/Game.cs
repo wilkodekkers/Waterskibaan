@@ -1,45 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
 using System.Windows.Threading;
 
 namespace Waterskibaan
 {
-    public class NieuweBezoekerArgs : EventArgs
-    {
-        public Sporter Sporter { get; set; }
-    }
-
-    public class InstructieAfgelopenArgs : EventArgs
-    {
-        public List<Sporter> SportersKlaar { get; set; }
-        public List<Sporter> SportersNieuw { get; set; }
-    }
-
-    public class LijnenVerplaatsArgs : EventArgs
-    {
-        public Sporter Sporter { get; set; }
-    }
-
     public class Game
     {
+        private readonly Waterskibaan _waterskibaan;
+        private readonly WachtrijInstructie _wachtrijInstrucie;
+        private readonly InstructieGroep _instructieGroep;
+        private readonly WachtrijStarten _wachtrijStarten;
+
+        public event Action<NieuweBezoekerArgs> NieuweBezoeker;
+        public event Action<InstructieAfgelopenArgs> InstructieAfgelopen;
+        public event Action<LijnenVerplaatsArgs> LijnenVerplaats;
         public int TimeElapsed;
-
-        private Waterskibaan _waterskibaan;
-        private WachtrijInstructie _wachtrijInstrucie;
-        private InstructieGroep _instructieGroep;
-        private WachtrijStarten _wachtrijStarten;
-
-        public delegate void NieuweBezoekerHandler(NieuweBezoekerArgs args);
-        public delegate void InstructieAfgelopenHandler(InstructieAfgelopenArgs args);
-        public delegate void LijnenVerplaatsHandler(LijnenVerplaatsArgs args);
-        public event NieuweBezoekerHandler NieuweBezoeker;
-        public event InstructieAfgelopenHandler InstructieAfgelopen;
-        public event LijnenVerplaatsHandler LijnenVerplaats;
-
 
         public Game()
         {

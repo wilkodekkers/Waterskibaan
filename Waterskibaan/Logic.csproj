@@ -48,12 +48,15 @@
   <ItemGroup>
     <Compile Include="Game.cs" />
     <Compile Include="IMoves.cs" />
+    <Compile Include="InstructieAfgelopenArgs.cs" />
     <Compile Include="InstructieGroep.cs" />
     <Compile Include="Jump.cs" />
     <Compile Include="Kabel.cs" />
     <Compile Include="Lijn.cs" />
+    <Compile Include="LijnenVerplaatsArgs.cs" />
     <Compile Include="LijnenVoorraad.cs" />
     <Compile Include="MoveCollection.cs" />
+    <Compile Include="NieuweBezoekerArgs.cs" />
     <Compile Include="Omdraaien.cs" />
     <Compile Include="OpEenBeen.cs" />
     <Compile Include="Program.cs" />

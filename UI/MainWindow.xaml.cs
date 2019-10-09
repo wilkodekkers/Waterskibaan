@@ -28,7 +28,7 @@ namespace UI
 
             DispatcherTimer = new DispatcherTimer(DispatcherPriority.Normal)
             {
-                Interval = TimeSpan.FromMilliseconds(1000)
+                Interval = TimeSpan.FromMilliseconds(100)
             };
 
             Game.NieuweBezoeker += OnNieuweBezoeker;
