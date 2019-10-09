@@ -19,6 +19,11 @@ namespace Waterskibaan
         public List<Sporter> SportersNieuw { get; set; }
     }
 
+    public class LijnenVerplaatsArgs : EventArgs
+    {
+        public Sporter Sporter { get; set; }
+    }
+
     public class Game
     {
         public int TimeElapsed;
@@ -30,8 +35,10 @@ namespace Waterskibaan
 
         public delegate void NieuweBezoekerHandler(NieuweBezoekerArgs args);
         public delegate void InstructieAfgelopenHandler(InstructieAfgelopenArgs args);
+        public delegate void LijnenVerplaatsHandler(LijnenVerplaatsArgs args);
         public event NieuweBezoekerHandler NieuweBezoeker;
         public event InstructieAfgelopenHandler InstructieAfgelopen;
+        public event LijnenVerplaatsHandler LijnenVerplaats;
 
 
         public Game()
@@ -69,8 +76,10 @@ namespace Waterskibaan
             if (TimeElapsed % 3 != 0) return;
 
             Sporter sporter = new Sporter(MoveCollection.GetWillekeurigeMoves());
-            NieuweBezoekerArgs args = new NieuweBezoekerArgs();
-            args.Sporter = sporter;
+            NieuweBezoekerArgs args = new NieuweBezoekerArgs
+            {
+                Sporter = sporter
+            };
 
             NieuweBezoeker?.Invoke(args);
         }
@@ -79,9 +88,11 @@ namespace Waterskibaan
         {
             if (TimeElapsed % 20 != 0) return;
 
-            InstructieAfgelopenArgs args = new InstructieAfgelopenArgs();
-            args.SportersKlaar = _instructieGroep.SportersVerlatenRij(5);
-            args.SportersNieuw = _wachtrijInstrucie.SportersVerlatenRij(5);
+            InstructieAfgelopenArgs args = new InstructieAfgelopenArgs
+            {
+                SportersKlaar = _instructieGroep.SportersVerlatenRij(5),
+                SportersNieuw = _wachtrijInstrucie.SportersVerlatenRij(5)
+            };
 
             InstructieAfgelopen?.Invoke(args);
         }
@@ -99,6 +110,13 @@ namespace Waterskibaan
             sporter.Zwemvest = new Zwemvest();
 
             _waterskibaan.SporterStart(sporter);
+
+            LijnenVerplaatsArgs args = new LijnenVerplaatsArgs
+            {
+                Sporter = sporter
+            };
+
+            LijnenVerplaats?.Invoke(args);
         }
 
         public override string ToString()

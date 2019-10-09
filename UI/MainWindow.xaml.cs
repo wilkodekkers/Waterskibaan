@@ -33,11 +33,17 @@ namespace UI
 
             Game.NieuweBezoeker += OnNieuweBezoeker;
             Game.InstructieAfgelopen += OnInstructieAfgelopen;
+            Game.LijnenVerplaats += OnLijnenVerplaats;
 
             Game.Initialize(DispatcherTimer);
 
             DispatcherTimer.Tick += TimerEvent;
             DispatcherTimer.Start();
+        }
+
+        private void OnLijnenVerplaats(LijnenVerplaatsArgs e)
+        {
+            FinishedSporters.Remove(e.Sporter);
         }
 
         private void OnInstructieAfgelopen(InstructieAfgelopenArgs e)
