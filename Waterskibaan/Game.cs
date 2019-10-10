@@ -5,23 +5,15 @@ namespace Waterskibaan
 {
     public class Game
     {
-        private readonly Waterskibaan _waterskibaan;
-        private readonly WachtrijInstructie _wachtrijInstrucie;
-        private readonly InstructieGroep _instructieGroep;
-        private readonly WachtrijStarten _wachtrijStarten;
+        private readonly Waterskibaan _waterskibaan = new Waterskibaan();
+        private readonly WachtrijInstructie _wachtrijInstrucie = new WachtrijInstructie();
+        private readonly InstructieGroep _instructieGroep = new InstructieGroep();
+        private readonly WachtrijStarten _wachtrijStarten = new WachtrijStarten();
 
         public event Action<NieuweBezoekerArgs> NieuweBezoeker;
         public event Action<InstructieAfgelopenArgs> InstructieAfgelopen;
         public event Action<LijnenVerplaatsArgs> LijnenVerplaats;
         public int TimeElapsed;
-
-        public Game()
-        {
-            _waterskibaan = new Waterskibaan();
-            _wachtrijInstrucie = new WachtrijInstructie();
-            _instructieGroep = new InstructieGroep();
-            _wachtrijStarten = new WachtrijStarten();
-        }
 
         public void Initialize(DispatcherTimer timer)
         {
@@ -79,6 +71,8 @@ namespace Waterskibaan
 
             if (_wachtrijStarten.GetAlleSporters().Count == 0) return;
 
+            if (!_waterskibaan.Kabel.IsStartPositieLeeg()) return;
+
             Sporter sporter = _wachtrijStarten.SportersVerlatenRij(1)[0];
             sporter.Skies = new Skies();
             sporter.Zwemvest = new Zwemvest();
@@ -95,7 +89,7 @@ namespace Waterskibaan
 
         public override string ToString()
         {
-            return $"{_waterskibaan.ToString()}";
+            return $"{_waterskibaan.ToString()} \n {_wachtrijStarten.ToString()}";
         }
     }
 }

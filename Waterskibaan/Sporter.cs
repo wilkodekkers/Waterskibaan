@@ -15,7 +15,9 @@ namespace Waterskibaan
 
         public Sporter(List<IMoves> moves)
         {
+            Zwemvest = null;
             Moves = moves;
+            Score = 0;
 
             Random random = new Random();
             byte[] b = new byte[3];

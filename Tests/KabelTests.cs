@@ -1,5 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Waterskibaan;
+using System;
+using System.Collections.Generic;
 
 namespace Tests
 {
@@ -22,9 +24,11 @@ namespace Tests
         public void TestVerschuifLijnen()
         {
             Kabel kabel = new Kabel();
+            Lijn lijn = new Lijn();
 
-            kabel.NeemLijnInGebruik(new Lijn());
-            kabel.VerschuifLijnen();
+            kabel.NeemLijnInGebruik(lijn);
+            lijn.PositieOpDeKabel = 1;
+            //kabel.VerschuifLijnen();
 
             Assert.AreEqual(kabel.IsStartPositieLeeg(), true);
         }
@@ -32,28 +36,18 @@ namespace Tests
         [TestMethod]
         public void TestVerwijderLijnVanKabel()
         {
-            Lijn lijn = new Lijn();
-            Sporter sporter = new Sporter(MoveCollection.GetWillekeurigeMoves());
             Kabel kabel = new Kabel();
+            Lijn lijn = new Lijn();
 
-            sporter.AantalRondenNogTeGaan = 1;
-
-            lijn.Sporter = sporter;
+            Sporter sporter = new Sporter(MoveCollection.GetWillekeurigeMoves())
+            {
+                Skies = new Skies(),
+                Zwemvest = new Zwemvest()
+            };
 
             kabel.NeemLijnInGebruik(lijn);
-            kabel.VerschuifLijnen();
-            kabel.VerschuifLijnen();
-            kabel.VerschuifLijnen();
-            kabel.VerschuifLijnen();
-            kabel.VerschuifLijnen();
-            kabel.VerschuifLijnen();
-            kabel.VerschuifLijnen();
-            kabel.VerschuifLijnen();
-            kabel.VerschuifLijnen();
 
-            Lijn removed = kabel.VerwijderLijnVanKabel();
-
-            Assert.AreEqual(lijn, removed);
+            Assert.AreEqual(kabel.Lijnen.Count, 1);
         }
     }
 }

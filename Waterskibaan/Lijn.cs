@@ -2,10 +2,12 @@
 {
     public class Lijn
     {
-        private int _positieOpDeKabel;
-        private Sporter _sporter;
+        public int PositieOpDeKabel { get; set; }
+        public Sporter Sporter { get; set; }
 
-        public int PositieOpDeKabel { get => _positieOpDeKabel; set => _positieOpDeKabel = value; }
-        public Sporter Sporter { get => _sporter; set => _sporter = value; }
+        public Lijn()
+        {
+            PositieOpDeKabel = 0;
+        }
     }
 }
