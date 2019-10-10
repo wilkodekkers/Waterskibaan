@@ -105,26 +105,27 @@ namespace UI
 
         private void DrawNewVisitor(Sporter sporter, int offset, int leftOffset)
         {
-            //Color color = sporter.KledingKleur;
-            //SolidColorBrush fillBrush = new SolidColorBrush(color);
-            //SolidColorBrush strokeBrush = new SolidColorBrush(Colors.Black);
+            var converter = new BrushConverter();
 
-            //Rectangle leftEllipse = new Rectangle
-            //{
-            //    Stroke = strokeBrush,
-            //    Fill = fillBrush,
-            //    Height = 20,
-            //    Width = 20,
-            //    RadiusX = 5,
-            //    RadiusY = 5
-            //};
+            SolidColorBrush fillBrush = (SolidColorBrush) converter.ConvertFromString(sporter.KledingKleur);
+            SolidColorBrush strokeBrush = new SolidColorBrush(Colors.Black);
 
-            //int setLeft = 5 + ((leftOffset - 1) * 32);
+            Rectangle leftEllipse = new Rectangle
+            {
+                Stroke = strokeBrush,
+                Fill = fillBrush,
+                Height = 20,
+                Width = 20,
+                RadiusX = 5,
+                RadiusY = 5
+            };
 
-            //Canvas.SetTop(leftEllipse, 5 + offset);
-            //Canvas.SetLeft(leftEllipse, setLeft);
+            int setLeft = 5 + ((leftOffset - 1) * 32);
 
-            //canvas.Children.Add(leftEllipse);
+            Canvas.SetTop(leftEllipse, 5 + offset);
+            Canvas.SetLeft(leftEllipse, setLeft);
+
+            canvas.Children.Add(leftEllipse);
         }
     }
 }
