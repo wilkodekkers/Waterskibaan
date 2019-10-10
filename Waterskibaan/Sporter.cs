@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Media;
 
 namespace Waterskibaan
 {
@@ -8,7 +7,7 @@ namespace Waterskibaan
     {
         public int AantalRondenNogTeGaan { get; set; }
         public Zwemvest Zwemvest { get; set; }
-        public Color KledingKleur { get; set; }
+        public string KledingKleur { get; set; }
         public Skies Skies { get; set; }
         public List<IMoves> Moves { get; set; }
         public int Score { get; set; }
@@ -20,9 +19,7 @@ namespace Waterskibaan
             Score = 0;
 
             Random random = new Random();
-            byte[] b = new byte[3];
-            random.NextBytes(b);
-            KledingKleur = Color.FromRgb(b[0], b[1], b[2]);
+            KledingKleur = string.Format("#{0:X6}", random.Next(0x1000000));
         }
     }
 }

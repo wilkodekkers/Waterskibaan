@@ -5,11 +5,11 @@ namespace Waterskibaan
 {
     public class Kabel
     {
-        public LinkedList<Lijn> _lijnen = new LinkedList<Lijn>();
+        public LinkedList<Lijn> Lijnen { get; set; } = new LinkedList<Lijn>();
 
         public bool IsStartPositieLeeg()
         {
-            return _lijnen.FirstOrDefault() == null || _lijnen.First().PositieOpDeKabel != 0;
+            return Lijnen.FirstOrDefault() == null || Lijnen.First().PositieOpDeKabel != 0;
         }
 
         public void NeemLijnInGebruik(Lijn lijn)
@@ -17,7 +17,7 @@ namespace Waterskibaan
             if (IsStartPositieLeeg())
             {
                 lijn.PositieOpDeKabel = 0;
-                _lijnen.AddFirst(lijn);
+                Lijnen.AddFirst(lijn);
             }
         }
 
@@ -25,7 +25,7 @@ namespace Waterskibaan
         {
             Lijn moveLine = null;
 
-            foreach (Lijn lijn in _lijnen)
+            foreach (Lijn lijn in Lijnen)
             {
                 if (lijn.PositieOpDeKabel == 9)
                 {
@@ -46,32 +46,32 @@ namespace Waterskibaan
                     moveLine.Sporter.AantalRondenNogTeGaan--;
                 }
 
-                _lijnen.Remove(moveLine);
-                _lijnen.AddFirst(moveLine);
+                Lijnen.Remove(moveLine);
+                Lijnen.AddFirst(moveLine);
             }
         }
 
         public Lijn VerwijderLijnVanKabel()
         {
-            if (_lijnen.Count == 0 || _lijnen.Last.Value.PositieOpDeKabel != 9 || _lijnen.Last.Value.Sporter.AantalRondenNogTeGaan != 1)
+            if (Lijnen.Count == 0 || Lijnen.Last.Value.PositieOpDeKabel != 9 || Lijnen.Last.Value.Sporter.AantalRondenNogTeGaan != 1)
             {
                 return null;
             }
 
-            Lijn lijn = _lijnen.Last.Value;
+            Lijn lijn = Lijnen.Last.Value;
 
-            _lijnen.RemoveLast();
+            Lijnen.RemoveLast();
 
             return lijn;
         }
 
         public override string ToString()
         {
-            if (_lijnen.Count == 0) return "";
+            if (Lijnen.Count == 0) return "";
 
             string result = "";
 
-            foreach (Lijn lijn in _lijnen)
+            foreach (Lijn lijn in Lijnen)
             {
                 result += $"({lijn.PositieOpDeKabel}, {lijn.Sporter.AantalRondenNogTeGaan})|";
             }
