@@ -4,39 +4,46 @@ namespace Waterskibaan
 {
     public class Waterskibaan
     {
-        private Kabel _kabel = new Kabel();
-        private LijnenVoorraad _lijnen = new LijnenVoorraad();
+        private Kabel Kabel { get; set; }
+        private LijnenVoorraad LijnenVoorraad { get; set; }
 
         public Waterskibaan()
         {
+            Kabel = new Kabel();
+            LijnenVoorraad = new LijnenVoorraad();
+
             for (int i = 0; i < 15; i++)
-            {
-                _lijnen.LijnToevoegenAanRij(new Lijn());
-            }
+                LijnenVoorraad.LijnToevoegenAanRij(new Lijn());
         }
 
         public void VerplaatsKabel()
         {
-            _kabel.VerschuifLijnen();
+            Kabel.VerschuifLijnen();
+
+            Lijn lijn = Kabel.VerwijderLijnVanKabel();
+
+            if (lijn != null)
+                LijnenVoorraad.LijnToevoegenAanRij(lijn);
         }
 
         public void SporterStart(Sporter sp)
         {
-            if (sp.Skies == null || sp.Zwemvest == null) throw new Exception("Een sporter heeft skies en een zwemvest nodig!");
+            if (sp.Skies == null || sp.Zwemvest == null)
+                throw new Exception("Een sporter heeft skies en een zwemvest nodig!");
 
-            if (!_kabel.IsStartPositieLeeg()) return;
+            if (!Kabel.IsStartPositieLeeg()) return;
 
-            Lijn lijn = _lijnen.VerwijderEersteLijn();
+            Lijn lijn = LijnenVoorraad.VerwijderEersteLijn();
 
             lijn.Sporter = sp;
             lijn.Sporter.AantalRondenNogTeGaan = new Random().Next(1, 3);
 
-            _kabel.NeemLijnInGebruik(lijn);
+            Kabel.NeemLijnInGebruik(lijn);
         }
 
         public override string ToString()
         {
-            return $"{_lijnen} | {_kabel}";
+            return $"{LijnenVoorraad} | {Kabel}";
         }
     }
 }

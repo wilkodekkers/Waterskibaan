@@ -4,23 +4,31 @@ namespace Waterskibaan
 {
     public class LijnenVoorraad
     {
-        private Queue<Lijn> _lijnen = new Queue<Lijn>();
+        private Queue<Lijn> Lijnen { get; set; }
+
+        public LijnenVoorraad()
+        {
+            Lijnen = new Queue<Lijn>();
+        }
 
         public void LijnToevoegenAanRij(Lijn lijn)
         {
-            _lijnen.Enqueue(lijn);
+            Lijnen.Enqueue(lijn);
         }
 
         public Lijn VerwijderEersteLijn()
         {
-            if (_lijnen.Count == 0) return null;
+            Lijn lijn = null;
 
-            return _lijnen.Dequeue();
+            if (Lijnen.Count > 0)
+                lijn = Lijnen.Dequeue();
+
+            return lijn;
         }
 
         public int GetAantalLijnen()
         {
-            return _lijnen.Count;
+            return Lijnen.Count;
         }
 
         public override string ToString()
