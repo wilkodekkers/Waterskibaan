@@ -11,8 +11,10 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="669" VerticalAlignment="Top" Width="596" Background="#FF6DA3CF" />
-        <Label x:Name="label" Content="Waterskibaan Data" Margin="601,10,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" Height="395" Width="994" Grid.ColumnSpan="2"/>
+        <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="652" VerticalAlignment="Bottom" Width="778" Background="#FF6DA3CF" Margin="10,0,0,10.5" />
+        <Label x:Name="label" Content="Waterskibaan Data" Margin="10.5,10,10,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" Height="395" Width="777" Grid.Column="1"/>
+        <Button x:Name="bt_start" Content="Start" Grid.Column="1" HorizontalAlignment="Left" Margin="582.5,622,0,10.5" Width="100" Click="bt_start_Click"/>
+        <Button x:Name="bt_stop" Content="Stop" Grid.Column="1" Margin="687.5,622,10,10.5" Click="bt_stop_Click"/>
 
     </Grid>
 </Window>

@@ -38,7 +38,6 @@ namespace UI
             Game.Initialize(DispatcherTimer);
 
             DispatcherTimer.Tick += TimerEvent;
-            DispatcherTimer.Start();
         }
 
         private void OnLijnenVerplaats(LijnenVerplaatsArgs e)
@@ -126,6 +125,16 @@ namespace UI
             Canvas.SetLeft(leftEllipse, setLeft);
 
             canvas.Children.Add(leftEllipse);
+        }
+
+        private void bt_start_Click(object sender, RoutedEventArgs e)
+        {
+            DispatcherTimer.Start();
+        }
+
+        private void bt_stop_Click(object sender, RoutedEventArgs e)
+        {
+            DispatcherTimer.Stop();
         }
     }
 }
