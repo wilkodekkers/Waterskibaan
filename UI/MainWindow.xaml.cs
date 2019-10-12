@@ -16,9 +16,10 @@ namespace UI
     {
         private readonly DispatcherTimer DispatcherTimer;
         private readonly Game Game;
-        private readonly LinkedList<Sporter> NewVisitors = new LinkedList<Sporter>();
-        private readonly LinkedList<Sporter> NewSporters = new LinkedList<Sporter>();
-        private readonly LinkedList<Sporter> FinishedSporters = new LinkedList<Sporter>();
+        private readonly LinkedList<Sporter> VisitorQueue = new LinkedList<Sporter>();
+        private readonly LinkedList<Sporter> InstructionQueue = new LinkedList<Sporter>();
+        private readonly LinkedList<Sporter> StartQueue = new LinkedList<Sporter>();
+        private readonly LinkedList<Sporter> ActiveSporters = new LinkedList<Sporter>();
 
         public MainWindow()
         {
@@ -42,36 +43,38 @@ namespace UI
 
         private void OnLijnenVerplaats(LijnenVerplaatsArgs e)
         {
-            FinishedSporters.Remove(e.Sporter);
+            StartQueue.Remove(e.Sporter);
+            ActiveSporters.AddFirst(e.Sporter);
         }
 
         private void OnInstructieAfgelopen(InstructieAfgelopenArgs e)
         {
             foreach (Sporter sporter in e.SportersNieuw)
             {
-                NewVisitors.Remove(sporter);
-                NewSporters.AddLast(sporter);
+                VisitorQueue.Remove(sporter);
+                InstructionQueue.AddLast(sporter);
             }
 
             foreach (Sporter sporter in e.SportersKlaar)
             {
-                NewSporters.Remove(sporter);
-                FinishedSporters.AddLast(sporter);
+                InstructionQueue.Remove(sporter);
+                StartQueue.AddLast(sporter);
             }
         }
 
         private void OnNieuweBezoeker(NieuweBezoekerArgs e)
         {
-            NewVisitors.AddLast(e.Sporter);
+            VisitorQueue.AddLast(e.Sporter);
         }
 
         private void TimerEvent(object sender, EventArgs e)
         {
             canvas.Children.Clear();
 
-            DrawQueue(NewVisitors, 1);
-            DrawQueue(NewSporters, 2);
-            DrawQueue(FinishedSporters, 3);
+            DrawQueue(VisitorQueue, 1);
+            DrawQueue(InstructionQueue, 2);
+            DrawQueue(StartQueue, 3);
+            DrawQueue(ActiveSporters, 4);
 
             label.Content = Game.ToString();
         }
