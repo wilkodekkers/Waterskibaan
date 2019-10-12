@@ -12,34 +12,29 @@ namespace Waterskibaan
 
         private Queue<Sporter> _queue = new Queue<Sporter>();
 
+        public abstract bool CheckAantal(int aantal);
+
         public void SporterNeemPlaatsInRij(Sporter sporter)
         {
-            if (_queue.Count >= MaxLengteRij) return;
-
-            _queue.Enqueue(sporter);
+            if (CheckAantal(_queue.Count + 1))
+            {
+                _queue.Enqueue(sporter);
+            }
+            else
+            {
+                throw new Exception("De wachtrij is vol!");
+            }
         }
 
         public List<Sporter> GetAlleSporters()
         {
-            if (_queue.Count == 0) return new List<Sporter>();
-
-            List<Sporter> sporters = new List<Sporter>();
-
-            foreach (Sporter sporter in _queue)
-            {
-                sporters.Add(sporter);
-            }
-
-            return sporters;
+            return _queue.ToList();
         }
 
         public List<Sporter> SportersVerlatenRij(int aantal)
         {
-            if (_queue.Count == 0) return new List<Sporter>();
-
+            int amount = aantal > _queue.Count ? _queue.Count : aantal;
             List<Sporter> sporters = new List<Sporter>();
-
-            int amount = aantal <= _queue.Count ? aantal : aantal - _queue.Count;
 
             for (int i = 0; i < amount; i++)
             {

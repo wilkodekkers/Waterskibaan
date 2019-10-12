@@ -73,7 +73,7 @@ namespace Waterskibaan
 
             foreach (Lijn lijn in Lijnen)
             {
-                result += $"({lijn.PositieOpDeKabel}, {lijn.Sporter.AantalRondenNogTeGaan})|";
+                result += $"{lijn.PositieOpDeKabel}|";
             }
 
             return result.Substring(0, result.Length - 1);

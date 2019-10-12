@@ -4,6 +4,11 @@
     {
         public override int MaxLengteRij => 100;
 
+        public override bool CheckAantal(int aantal)
+        {
+            return aantal <= MaxLengteRij;
+        }
+
         public void OnNieuweBezoeker(NieuweBezoekerArgs args)
         {
             SporterNeemPlaatsInRij(args.Sporter);

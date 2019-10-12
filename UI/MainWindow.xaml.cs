@@ -44,7 +44,7 @@ namespace UI
 
         private void OnLijnenVerplaats(LijnenVerplaatsArgs e)
         {
-            StartQueue.Remove(e.Sporter);
+            FinishedSporters.Remove(e.Sporter);
             ActiveSporters.AddFirst(e.Sporter);
         }
 
