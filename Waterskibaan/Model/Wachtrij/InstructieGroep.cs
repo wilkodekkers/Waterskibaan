@@ -19,7 +19,7 @@
 
         public override string ToString()
         {
-            return $"Instructie groep: {GetAlleSporters().Count} sporters";
+            return $"Instructie groep: {GetAlleSporters().Count} wachtenden";
         }
     }
 }

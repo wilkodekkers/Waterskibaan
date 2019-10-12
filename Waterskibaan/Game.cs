@@ -89,7 +89,7 @@ namespace Waterskibaan
 
         public override string ToString()
         {
-            return $"{_waterskibaan.ToString()} \n {_wachtrijStarten.ToString()}";
+            return $"Waterskibaan \n\n {_waterskibaan} \n {_wachtrijInstrucie} \n {_instructieGroep} \n {_wachtrijStarten}";
         }
     }
 }

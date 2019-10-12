@@ -16,7 +16,7 @@
 
         public override string ToString()
         {
-            return $"Wachtrij instrucie: {GetAlleSporters().Count} sporters";
+            return $"Wachtrij instructie: {GetAlleSporters().Count} wachtenden";
         }
     }
 }

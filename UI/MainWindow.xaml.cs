@@ -19,7 +19,6 @@ namespace UI
         private readonly LinkedList<Sporter> NewVisitors = new LinkedList<Sporter>();
         private readonly List<Sporter> NewSporters = new List<Sporter>();
         private readonly LinkedList<Sporter> FinishedSporters = new LinkedList<Sporter>();
-        private readonly LinkedList<Sporter> ActiveSporters = new LinkedList<Sporter>();
 
         public MainWindow()
         {
@@ -45,7 +44,7 @@ namespace UI
         private void OnLijnenVerplaats(LijnenVerplaatsArgs e)
         {
             FinishedSporters.Remove(e.Sporter);
-            ActiveSporters.AddFirst(e.Sporter);
+
         }
 
         private void OnInstructieAfgelopen(InstructieAfgelopenArgs e)
@@ -72,12 +71,40 @@ namespace UI
         {
             canvas.Children.Clear();
 
+            DrawGround();
             DrawInstructionQueue();
             DrawQueue(NewVisitors, 1);
             DrawQueue(FinishedSporters, 2);
-            DrawQueue(ActiveSporters, 3);
+            DrawWaterSkiLanes();
 
             label.Content = Game.ToString();
+        }
+
+        private void DrawGround()
+        {
+            Rectangle left = new Rectangle()
+            {
+                Width = 400,
+                Height = canvas.Height,
+                Stroke = new SolidColorBrush(Colors.Green),
+                Fill = new SolidColorBrush(Colors.Green)
+            };
+
+            Canvas.SetLeft(left, 0);
+            Canvas.SetTop(left, 0);
+            canvas.Children.Add(left);
+
+            Rectangle bottom = new Rectangle()
+            {
+                Width = canvas.Width,
+                Height = 200,
+                Stroke = new SolidColorBrush(Colors.Green),
+                Fill = new SolidColorBrush(Colors.Green)
+            };
+
+            Canvas.SetLeft(bottom, 0);
+            Canvas.SetBottom(bottom, 0);
+            canvas.Children.Add(bottom);
         }
 
         private void DrawQueue(LinkedList<Sporter> queue, int offset)
@@ -191,6 +218,67 @@ namespace UI
                         Canvas.SetLeft(place, canvas.Width - 660 + (i * 22));
                         canvas.Children.Add(place);
                     }
+                }
+            }
+        }
+
+        private void DrawWaterSkiLanes()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                Ellipse ellipse = new Ellipse()
+                {
+                    Stroke = new SolidColorBrush(Colors.Black),
+                    Fill = new SolidColorBrush(Colors.White),
+                    Width = 20,
+                    Height = 20
+                };
+
+                TextBlock number = new TextBlock()
+                {
+                    Text = i.ToString(),
+                    Foreground = new SolidColorBrush(Colors.Black)
+                };
+
+                if (i >= 0 && i <= 2)
+                {
+                    Canvas.SetTop(ellipse, 40);
+                    Canvas.SetLeft(ellipse, canvas.Width - 300 + (i * 100));
+                    canvas.Children.Add(ellipse);
+
+                    Canvas.SetTop(number, 40);
+                    Canvas.SetLeft(number, canvas.Width - 270 + (i * 100));
+                    canvas.Children.Add(number);
+                }
+                else if (i == 3 || i == 9)
+                {
+                    Canvas.SetTop(ellipse, 140);
+                    Canvas.SetLeft(ellipse, canvas.Width - 300 + (i == 9 ? 0 : 2 * 100));
+                    canvas.Children.Add(ellipse);
+
+                    Canvas.SetTop(number, 140);
+                    Canvas.SetLeft(number, canvas.Width - 270 + (i == 9 ? 0 : 2 * 100));
+                    canvas.Children.Add(number);
+                }
+                else if (i == 4 || i == 8)
+                {
+                    Canvas.SetTop(ellipse, 240);
+                    Canvas.SetLeft(ellipse, canvas.Width - 300 + (i == 8 ? 0 : 2 * 100));
+                    canvas.Children.Add(ellipse);
+
+                    Canvas.SetTop(number, 240);
+                    Canvas.SetLeft(number, canvas.Width - 270 + (i == 8 ? 0 : 2 * 100));
+                    canvas.Children.Add(number);
+                }
+                else
+                {
+                    Canvas.SetTop(ellipse, 340);
+                    Canvas.SetLeft(ellipse, canvas.Width - (100 + ((i - 5) * 100)));
+                    canvas.Children.Add(ellipse);
+
+                    Canvas.SetTop(number, 340);
+                    Canvas.SetLeft(number, canvas.Width - (70 + ((i - 5) * 100)));
+                    canvas.Children.Add(number);
                 }
             }
         }

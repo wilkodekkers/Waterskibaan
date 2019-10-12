@@ -19,7 +19,7 @@
 
         public override string ToString()
         {
-            return $"Wachtrij starten: {GetAlleSporters().Count} sporters";
+            return $"Wachtrij starten: {GetAlleSporters().Count} wachtenden";
         }
     }
 }
