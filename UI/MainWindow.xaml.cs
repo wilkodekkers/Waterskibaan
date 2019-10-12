@@ -17,7 +17,7 @@ namespace UI
         private readonly DispatcherTimer DispatcherTimer;
         private readonly Game Game;
         private readonly LinkedList<Sporter> NewVisitors = new LinkedList<Sporter>();
-        private readonly LinkedList<Sporter> NewSporters = new LinkedList<Sporter>();
+        private readonly List<Sporter> NewSporters = new List<Sporter>();
         private readonly LinkedList<Sporter> FinishedSporters = new LinkedList<Sporter>();
 
         public MainWindow()
@@ -38,6 +38,7 @@ namespace UI
             Game.Initialize(DispatcherTimer);
 
             DispatcherTimer.Tick += TimerEvent;
+            DispatcherTimer.Start();
         }
 
         private void OnLijnenVerplaats(LijnenVerplaatsArgs e)
@@ -50,7 +51,7 @@ namespace UI
             foreach (Sporter sporter in e.SportersNieuw)
             {
                 NewVisitors.Remove(sporter);
-                NewSporters.AddLast(sporter);
+                NewSporters.Add(sporter);
             }
 
             foreach (Sporter sporter in e.SportersKlaar)
@@ -69,9 +70,9 @@ namespace UI
         {
             canvas.Children.Clear();
 
+            DrawInstructionQueue();
             DrawQueue(NewVisitors, 1);
-            DrawQueue(NewSporters, 2);
-            DrawQueue(FinishedSporters, 3);
+            DrawQueue(FinishedSporters, 2);
 
             label.Content = Game.ToString();
         }
@@ -106,7 +107,7 @@ namespace UI
         {
             var converter = new BrushConverter();
 
-            SolidColorBrush fillBrush = (SolidColorBrush) converter.ConvertFromString(sporter.KledingKleur);
+            SolidColorBrush fillBrush = (SolidColorBrush)converter.ConvertFromString(sporter.KledingKleur);
             SolidColorBrush strokeBrush = new SolidColorBrush(Colors.Black);
 
             Rectangle leftEllipse = new Rectangle
@@ -135,6 +136,60 @@ namespace UI
         private void bt_stop_Click(object sender, RoutedEventArgs e)
         {
             DispatcherTimer.Stop();
+        }
+
+        private void DrawInstructionQueue()
+        {
+            SolidColorBrush blackBrush = new SolidColorBrush(Colors.Black);
+
+            Rectangle instructor = new Rectangle()
+            {
+                Stroke = blackBrush,
+                Fill = new SolidColorBrush(Colors.White),
+                Width = 20,
+                Height = 20,
+                RadiusX = 5,
+                RadiusY = 5
+            };
+
+            Canvas.SetTop(instructor, canvas.Height - 30);
+            Canvas.SetLeft(instructor, canvas.Width - 615);
+            canvas.Children.Add(instructor);
+
+            for (int i = 0; i < 5; i++)
+            {
+                Sporter sporter = NewSporters.Count >= i + 1 ? NewSporters[i] : null;
+
+                if (sporter != null)
+                {
+                    var converter = new BrushConverter();
+
+                    SolidColorBrush fillBrush = (SolidColorBrush)converter.ConvertFromString(sporter.KledingKleur);
+
+                    Rectangle place = new Rectangle()
+                    {
+                        Stroke = blackBrush,
+                        Fill = fillBrush,
+                        Width = 20,
+                        Height = 20,
+                        RadiusX = 5,
+                        RadiusY = 5
+                    };
+
+                    if (i >= 1 && i <= 3)
+                    {
+                        Canvas.SetTop(place, canvas.Height - 80);
+                        Canvas.SetLeft(place, canvas.Width - 660 + (i * 22));
+                        canvas.Children.Add(place);
+                    }
+                    else
+                    {
+                        Canvas.SetTop(place, canvas.Height - 60);
+                        Canvas.SetLeft(place, canvas.Width - 660 + (i * 22));
+                        canvas.Children.Add(place);
+                    }
+                }
+            }
         }
     }
 }
