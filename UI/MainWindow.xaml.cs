@@ -19,6 +19,7 @@ namespace UI
         private readonly LinkedList<Sporter> NewVisitors = new LinkedList<Sporter>();
         private readonly List<Sporter> NewSporters = new List<Sporter>();
         private readonly LinkedList<Sporter> FinishedSporters = new LinkedList<Sporter>();
+        private readonly LinkedList<Sporter> ActiveSporters = new LinkedList<Sporter>();
 
         public MainWindow()
         {
@@ -43,7 +44,8 @@ namespace UI
 
         private void OnLijnenVerplaats(LijnenVerplaatsArgs e)
         {
-            FinishedSporters.Remove(e.Sporter);
+            StartQueue.Remove(e.Sporter);
+            ActiveSporters.AddFirst(e.Sporter);
         }
 
         private void OnInstructieAfgelopen(InstructieAfgelopenArgs e)
@@ -73,6 +75,7 @@ namespace UI
             DrawInstructionQueue();
             DrawQueue(NewVisitors, 1);
             DrawQueue(FinishedSporters, 2);
+            DrawQueue(ActiveSporters, 3);
 
             label.Content = Game.ToString();
         }
