@@ -29,7 +29,7 @@ namespace UI
 
             DispatcherTimer = new DispatcherTimer(DispatcherPriority.Normal)
             {
-                Interval = TimeSpan.FromMilliseconds(200)
+                Interval = TimeSpan.FromMilliseconds(100)
             };
 
             Game.NieuweBezoeker += OnNieuweBezoeker;
@@ -73,7 +73,7 @@ namespace UI
         {
             DrawGround();
             DrawInstructionQueue();
-            //DrawInstructionGroup();
+            DrawInstructionGroup();
             //DrawQueue(FinishedSporters, 2);
             DrawWaterSkiLanes();
 
@@ -106,32 +106,6 @@ namespace UI
             Canvas.SetLeft(bottom, 0);
             Canvas.SetBottom(bottom, 0);
             canvas.Children.Add(bottom);
-        }
-
-        private void DrawQueue(LinkedList<Sporter> queue, int offset)
-        {
-            Line fence = new Line
-            {
-                Stroke = new SolidColorBrush(Colors.Black),
-                Fill = new SolidColorBrush(Colors.Black),
-                X1 = 32 * offset,
-                X2 = 32 * offset,
-                Y1 = 0,
-                Y2 = canvas.Height
-            };
-
-            canvas.Children.Add(fence);
-
-            int count = 0;
-
-            foreach (Sporter sporter in queue)
-            {
-                int heightOffset = 25 * count;
-
-                DrawNewVisitor(sporter, heightOffset, offset);
-
-                count++;
-            }
         }
 
         private void DrawNewVisitor(Sporter sporter, int offset, int leftOffset)
@@ -264,6 +238,18 @@ namespace UI
 
         private void DrawInstructionGroup()
         {
+            Rectangle ground = new Rectangle()
+            {
+                Stroke = new SolidColorBrush(Colors.SandyBrown),
+                Fill = new SolidColorBrush(Colors.SandyBrown),
+                Width = 250,
+                Height = 200
+            };
+
+            Canvas.SetTop(ground, 0);
+            Canvas.SetLeft(ground, 150);
+            canvas.Children.Add(ground);
+
             SolidColorBrush blackBrush = new SolidColorBrush(Colors.Black);
 
             Rectangle instructor = new Rectangle()
@@ -276,8 +262,8 @@ namespace UI
                 RadiusY = 5
             };
 
-            Canvas.SetTop(instructor, canvas.Height - 30);
-            Canvas.SetLeft(instructor, canvas.Width - 615);
+            Canvas.SetTop(instructor, 60);
+            Canvas.SetLeft(instructor, canvas.Width - 510);
             canvas.Children.Add(instructor);
 
             for (int i = 0; i < 5; i++)
@@ -302,14 +288,14 @@ namespace UI
 
                     if (i >= 1 && i <= 3)
                     {
-                        Canvas.SetTop(place, canvas.Height - 80);
-                        Canvas.SetLeft(place, canvas.Width - 660 + (i * 22));
+                        Canvas.SetTop(place, 100);
+                        Canvas.SetLeft(place, canvas.Width - 555 + (i * 22));
                         canvas.Children.Add(place);
                     }
                     else
                     {
-                        Canvas.SetTop(place, canvas.Height - 60);
-                        Canvas.SetLeft(place, canvas.Width - 660 + (i * 22));
+                        Canvas.SetTop(place, 80);
+                        Canvas.SetLeft(place, canvas.Width - 555 + (i * 22));
                         canvas.Children.Add(place);
                     }
                 }
