@@ -16,12 +16,13 @@ namespace UI
     {
         private readonly DispatcherTimer DispatcherTimer;
         private readonly Game Game;
-        private readonly LinkedList<Sporter> NewVisitors = new LinkedList<Sporter>();
+        private readonly List<Sporter> NewVisitors = new List<Sporter>();
         private readonly List<Sporter> NewSporters = new List<Sporter>();
         private readonly LinkedList<Sporter> FinishedSporters = new LinkedList<Sporter>();
 
         public MainWindow()
         {
+            ResizeMode = ResizeMode.CanMinimize;
             InitializeComponent();
 
             Game = new Game();
@@ -35,9 +36,10 @@ namespace UI
             Game.InstructieAfgelopen += OnInstructieAfgelopen;
             Game.LijnenVerplaats += OnLijnenVerplaats;
 
-            Game.Initialize(DispatcherTimer);
+            DispatcherTimer.Tick += (source, args) => canvas.Children.Clear();
+            DispatcherTimer.Tick += DrawGame;
 
-            DispatcherTimer.Tick += TimerEvent;
+            Game.Initialize(DispatcherTimer);
             DispatcherTimer.Start();
         }
 
@@ -64,21 +66,20 @@ namespace UI
 
         private void OnNieuweBezoeker(NieuweBezoekerArgs e)
         {
-            NewVisitors.AddLast(e.Sporter);
+            NewVisitors.Add(e.Sporter);
         }
 
-        private void TimerEvent(object sender, EventArgs e)
+        private void DrawGame(object sender, EventArgs e)
         {
-            canvas.Children.Clear();
-
             DrawGround();
             DrawInstructionQueue();
-            DrawQueue(NewVisitors, 1);
-            DrawQueue(FinishedSporters, 2);
+            //DrawInstructionGroup();
+            //DrawQueue(FinishedSporters, 2);
             DrawWaterSkiLanes();
 
             label.Content = Game.ToString();
         }
+
 
         private void DrawGround()
         {
@@ -169,6 +170,99 @@ namespace UI
         }
 
         private void DrawInstructionQueue()
+        {
+            Line fence = new Line()
+            {
+                Height = canvas.Height,
+                Fill = new SolidColorBrush(Colors.Black),
+                Stroke = new SolidColorBrush(Colors.Black),
+                X1 = 0,
+                X2 = 0,
+                Y1 = 0,
+                Y2 = canvas.Height
+            };
+
+            Canvas.SetLeft(fence, 0);
+            Canvas.SetTop(fence, 0);
+            canvas.Children.Add(fence);
+
+            for (int i = 0; i < 5; i++)
+            {
+                Line line = new Line()
+                {
+                    Height = canvas.Height,
+                    Fill = new SolidColorBrush(Colors.Black),
+                    Stroke = new SolidColorBrush(Colors.Black),
+                    X1 = 0,
+                    X2 = 0,
+                    Y1 = 0,
+                    Y2 = canvas.Height - 30
+                };
+
+                Canvas.SetLeft(line, i * 30 + 30);
+
+                if (i % 2 == 0)
+                {
+                    Canvas.SetTop(line, 30);
+                }
+                else
+                {
+                    Canvas.SetTop(line, 0);
+                }
+
+                canvas.Children.Add(line);
+            }
+
+            for (int i = 0; i < NewVisitors.Count; i++)
+            {
+                var sporter = NewVisitors[i];
+                var converter = new BrushConverter();
+
+                SolidColorBrush fillBrush = (SolidColorBrush)converter.ConvertFromString(sporter.KledingKleur);
+                SolidColorBrush strokeBrush = new SolidColorBrush(Colors.Black);
+
+                Rectangle sp = new Rectangle
+                {
+                    Stroke = strokeBrush,
+                    Fill = fillBrush,
+                    Height = 20,
+                    Width = 20,
+                    RadiusX = 5,
+                    RadiusY = 5
+                };
+
+
+                if (i < 20)
+                {
+                    Canvas.SetTop(sp, 10 + (32 * i));
+                    Canvas.SetLeft(sp, 125);
+                }
+                else if (i >= 20 && i < 40)
+                {
+                    Canvas.SetTop(sp, canvas.Height - 25 - (32 * (i - 20)));
+                    Canvas.SetLeft(sp, 95);
+                }
+                else if (i >= 40 && i < 60)
+                {
+                    Canvas.SetTop(sp, 10 + (32 * (i - 40)));
+                    Canvas.SetLeft(sp, 65);
+                }
+                else if (i >= 60 && i < 80)
+                {
+                    Canvas.SetTop(sp, canvas.Height - 25 - (32 * (i - 60)));
+                    Canvas.SetLeft(sp, 35);
+                }
+                else
+                {
+                    Canvas.SetTop(sp, 10 + (32 * (i - 80)));
+                    Canvas.SetLeft(sp, 5);
+                }
+
+                canvas.Children.Add(sp);
+            }
+        }
+
+        private void DrawInstructionGroup()
         {
             SolidColorBrush blackBrush = new SolidColorBrush(Colors.Black);
 
