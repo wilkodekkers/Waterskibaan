@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Game.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Model\Move\IMoves.cs" />
     <Compile Include="Event\InstructieAfgelopenArgs.cs" />
     <Compile Include="Model\Wachtrij\InstructieGroep.cs" />

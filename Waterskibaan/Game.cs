@@ -9,6 +9,7 @@ namespace Waterskibaan
         private readonly WachtrijInstructie _wachtrijInstrucie = new WachtrijInstructie();
         private readonly InstructieGroep _instructieGroep = new InstructieGroep();
         private readonly WachtrijStarten _wachtrijStarten = new WachtrijStarten();
+        private readonly Logger _logger = new Logger();
 
         public event Action<NieuweBezoekerArgs> NieuweBezoeker;
         public event Action<InstructieAfgelopenArgs> InstructieAfgelopen;
@@ -41,11 +42,13 @@ namespace Waterskibaan
         {
             if (_timeElapsed % 3 != 0) return;
 
-            var athlete = new Sporter(MoveCollection.GetWillekeurigeMoves());
+            var visitor = new Sporter(MoveCollection.GetWillekeurigeMoves());
             var args = new NieuweBezoekerArgs
             {
-                Sporter = athlete
+                Sporter = visitor
             };
+            
+            _logger.AddVisitor(visitor);
 
             NieuweBezoeker?.Invoke(args);
         }
