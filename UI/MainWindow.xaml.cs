@@ -12,70 +12,68 @@ namespace UI
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
-        private readonly DispatcherTimer DispatcherTimer;
-        private readonly Game Game;
-        private readonly List<Sporter> NewVisitors = new List<Sporter>();
-        private readonly List<Sporter> NewSporters = new List<Sporter>();
-        private readonly List<Sporter> FinishedSporters = new List<Sporter>();
+        private readonly DispatcherTimer _dispatcherTimer;
+        private readonly Game _game;
+        private readonly List<Sporter> _newVisitors = new List<Sporter>();
+        private readonly List<Sporter> _newAthletes = new List<Sporter>();
+        private readonly List<Sporter> _finishedAthletes = new List<Sporter>();
 
         public MainWindow()
         {
             ResizeMode = ResizeMode.CanMinimize;
             InitializeComponent();
 
-            Game = new Game();
+            _game = new Game();
 
-            DispatcherTimer = new DispatcherTimer(DispatcherPriority.Normal)
+            _dispatcherTimer = new DispatcherTimer(DispatcherPriority.Normal)
             {
                 Interval = TimeSpan.FromMilliseconds(35)
             };
 
-            Game.NieuweBezoeker += OnNieuweBezoeker;
-            Game.InstructieAfgelopen += OnInstructieAfgelopen;
-            Game.LijnenVerplaats += OnLijnenVerplaats;
+            _game.NieuweBezoeker += OnNewVisitor;
+            _game.InstructieAfgelopen += OnFinishedInstruction;
+            _game.LijnenVerplaats += OnChangeLines;
 
-            DispatcherTimer.Tick += (source, args) => canvas.Children.Clear();
-            DispatcherTimer.Tick += DrawGame;
+            _dispatcherTimer.Tick += (source, args) => canvas.Children.Clear();
+            _dispatcherTimer.Tick += DrawGame;
 
-            Game.Initialize(DispatcherTimer);
-            DispatcherTimer.Start();
+            _game.Initialize(_dispatcherTimer);
+            _dispatcherTimer.Start();
         }
 
-        private void OnLijnenVerplaats(LijnenVerplaatsArgs e)
+        private void OnChangeLines(LijnenVerplaatsArgs e)
         {
-            FinishedSporters.Remove(e.Sporter);
+            _finishedAthletes.Remove(e.Sporter);
         }
 
-        private void OnInstructieAfgelopen(InstructieAfgelopenArgs e)
+        private void OnFinishedInstruction(InstructieAfgelopenArgs e)
         {
-            foreach (Sporter sporter in e.SportersNieuw)
+            foreach (var athlete in e.SportersNieuw)
             {
-                NewVisitors.Remove(sporter);
-                NewSporters.Add(sporter);
+                _newVisitors.Remove(athlete);
+                _newAthletes.Add(athlete);
             }
 
-            foreach (Sporter sporter in e.SportersKlaar)
+            foreach (var athlete in e.SportersKlaar)
             {
-                NewSporters.Remove(sporter);
-                FinishedSporters.Add(sporter);
+                _newAthletes.Remove(athlete);
+                _finishedAthletes.Add(athlete);
             }
         }
 
-        private void OnNieuweBezoeker(NieuweBezoekerArgs e)
+        private void OnNewVisitor(NieuweBezoekerArgs e)
         {
-            NewVisitors.Add(e.Sporter);
+            _newVisitors.Add(e.Sporter);
         }
 
-        private Rectangle CreateSporterRectangle(Sporter sporter)
+        private static Rectangle CreateAthleteRectangle(Sporter athlete)
         {
             var converter = new BrushConverter();
-
-            SolidColorBrush fillBrush = (SolidColorBrush)converter.ConvertFromString(sporter.KledingKleur);
-            SolidColorBrush strokeBrush = new SolidColorBrush(Colors.Black);
-
-            Rectangle sp = new Rectangle
+            var fillBrush = (SolidColorBrush) converter.ConvertFromString(athlete.KledingKleur);
+            var strokeBrush = new SolidColorBrush(Colors.Black);
+            var sp = new Rectangle
             {
                 Stroke = strokeBrush,
                 Fill = fillBrush,
@@ -96,13 +94,12 @@ namespace UI
             DrawReadyToStartQueue();
             DrawWaterSkiLanes();
 
-            label.Content = Game.ToString();
+            label.Content = _game.ToString();
         }
-
 
         private void DrawGround()
         {
-            Rectangle left = new Rectangle()
+            var left = new Rectangle()
             {
                 Width = 400,
                 Height = canvas.Height,
@@ -114,7 +111,7 @@ namespace UI
             Canvas.SetTop(left, 0);
             canvas.Children.Add(left);
 
-            Rectangle bottom = new Rectangle()
+            var bottom = new Rectangle()
             {
                 Width = canvas.Width,
                 Height = 200,
@@ -129,17 +126,17 @@ namespace UI
 
         private void bt_start_Click(object sender, RoutedEventArgs e)
         {
-            DispatcherTimer.Start();
+            _dispatcherTimer.Start();
         }
 
         private void bt_stop_Click(object sender, RoutedEventArgs e)
         {
-            DispatcherTimer.Stop();
+            _dispatcherTimer.Stop();
         }
 
         private void DrawInstructionQueue()
         {
-            Line fence = new Line()
+            var fence = new Line()
             {
                 Height = canvas.Height,
                 Fill = new SolidColorBrush(Colors.Black),
@@ -154,9 +151,9 @@ namespace UI
             Canvas.SetTop(fence, 0);
             canvas.Children.Add(fence);
 
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
-                Line line = new Line()
+                var line = new Line()
                 {
                     Height = canvas.Height,
                     Fill = new SolidColorBrush(Colors.Black),
@@ -169,21 +166,14 @@ namespace UI
 
                 Canvas.SetLeft(line, i * 30 + 30);
 
-                if (i % 2 == 0)
-                {
-                    Canvas.SetTop(line, 30);
-                }
-                else
-                {
-                    Canvas.SetTop(line, 0);
-                }
+                Canvas.SetTop(line, i % 2 == 0 ? 30 : 0);
 
                 canvas.Children.Add(line);
             }
 
-            for (int i = 0; i < NewVisitors.Count; i++)
+            for (var i = 0; i < _newVisitors.Count; i++)
             {
-                Rectangle sp = CreateSporterRectangle(NewVisitors[i]);
+                var sp = CreateAthleteRectangle(_newVisitors[i]);
 
                 if (i < 20)
                 {
@@ -217,7 +207,7 @@ namespace UI
 
         private void DrawInstructionGroup()
         {
-            Rectangle ground = new Rectangle()
+            var ground = new Rectangle()
             {
                 Stroke = new SolidColorBrush(Colors.SandyBrown),
                 Fill = new SolidColorBrush(Colors.SandyBrown),
@@ -229,9 +219,9 @@ namespace UI
             Canvas.SetLeft(ground, 150);
             canvas.Children.Add(ground);
 
-            SolidColorBrush blackBrush = new SolidColorBrush(Colors.Black);
+            var blackBrush = new SolidColorBrush(Colors.Black);
 
-            Rectangle instructor = new Rectangle()
+            var instructor = new Rectangle()
             {
                 Stroke = blackBrush,
                 Fill = new SolidColorBrush(Colors.White),
@@ -245,33 +235,32 @@ namespace UI
             Canvas.SetLeft(instructor, canvas.Width - 510);
             canvas.Children.Add(instructor);
 
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
-                Sporter sporter = NewSporters.Count >= i + 1 ? NewSporters[i] : null;
+                var athlete = _newAthletes.Count >= i + 1 ? _newAthletes[i] : null;
 
-                if (sporter != null)
+                if (athlete == null) continue;
+                
+                var place = CreateAthleteRectangle(athlete);
+
+                if (i >= 1 && i <= 3)
                 {
-                    Rectangle place = CreateSporterRectangle(sporter);
-
-                    if (i >= 1 && i <= 3)
-                    {
-                        Canvas.SetTop(place, 100);
-                        Canvas.SetLeft(place, canvas.Width - 555 + (i * 22));
-                        canvas.Children.Add(place);
-                    }
-                    else
-                    {
-                        Canvas.SetTop(place, 80);
-                        Canvas.SetLeft(place, canvas.Width - 555 + (i * 22));
-                        canvas.Children.Add(place);
-                    }
+                    Canvas.SetTop(place, 100);
+                    Canvas.SetLeft(place, canvas.Width - 555 + (i * 22));
+                    canvas.Children.Add(place);
+                }
+                else
+                {
+                    Canvas.SetTop(place, 80);
+                    Canvas.SetLeft(place, canvas.Width - 555 + (i * 22));
+                    canvas.Children.Add(place);
                 }
             }
         }
 
         private void DrawReadyToStartQueue()
         {
-            Line bottomFence = new Line()
+            var bottomFence = new Line()
             {
                 Height = canvas.Height,
                 Fill = new SolidColorBrush(Colors.Black),
@@ -286,7 +275,7 @@ namespace UI
             Canvas.SetRight(bottomFence, 380);
             canvas.Children.Add(bottomFence);
 
-            Line rightFence = new Line()
+            var rightFence = new Line()
             {
                 Height = canvas.Height,
                 Fill = new SolidColorBrush(Colors.Black),
@@ -301,9 +290,9 @@ namespace UI
             Canvas.SetRight(rightFence, 380);
             canvas.Children.Add(rightFence);
 
-            for (int i = 0; i < 2; i++)
+            for (var i = 0; i < 2; i++)
             {
-                Line fence = new Line()
+                var fence = new Line()
                 {
                     Height = canvas.Height,
                     Fill = new SolidColorBrush(Colors.Black),
@@ -329,9 +318,9 @@ namespace UI
                 canvas.Children.Add(fence);
             }
 
-            for (int i = 0; i < FinishedSporters.Count; i++)
+            for (var i = 0; i < _finishedAthletes.Count; i++)
             {
-                Rectangle sp = CreateSporterRectangle(FinishedSporters[i]);
+                var sp = CreateAthleteRectangle(_finishedAthletes[i]);
 
                 if (i < 10)
                 {
@@ -350,9 +339,9 @@ namespace UI
 
         private void DrawWaterSkiLanes()
         {
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                Ellipse ellipse = new Ellipse()
+                var ellipse = new Ellipse()
                 {
                     Stroke = new SolidColorBrush(Colors.Black),
                     Fill = new SolidColorBrush(Colors.White),
@@ -360,52 +349,50 @@ namespace UI
                     Height = 20
                 };
 
-                TextBlock number = new TextBlock()
+                var number = new TextBlock()
                 {
                     Text = i.ToString(),
                     Foreground = new SolidColorBrush(Colors.Black)
                 };
 
-                if (i >= 0 && i <= 2)
+                switch (i)
                 {
-                    Canvas.SetTop(ellipse, 40);
-                    Canvas.SetLeft(ellipse, canvas.Width - 300 + (i * 100));
-                    canvas.Children.Add(ellipse);
+                    case 0:
+                    case 1:
+                    case 2:
+                        Canvas.SetTop(ellipse, 40);
+                        Canvas.SetLeft(ellipse, canvas.Width - 300 + (i * 100));
 
-                    Canvas.SetTop(number, 40);
-                    Canvas.SetLeft(number, canvas.Width - 270 + (i * 100));
-                    canvas.Children.Add(number);
-                }
-                else if (i == 3 || i == 9)
-                {
-                    Canvas.SetTop(ellipse, 140);
-                    Canvas.SetLeft(ellipse, canvas.Width - 300 + (i == 9 ? 0 : 2 * 100));
-                    canvas.Children.Add(ellipse);
+                        Canvas.SetTop(number, 40);
+                        Canvas.SetLeft(number, canvas.Width - 270 + (i * 100));
+                        break;
+                    case 3:
+                    case 9:
+                        Canvas.SetTop(ellipse, 140);
+                        Canvas.SetLeft(ellipse, canvas.Width - 300 + (i == 9 ? 0 : 2 * 100));
 
-                    Canvas.SetTop(number, 140);
-                    Canvas.SetLeft(number, canvas.Width - 270 + (i == 9 ? 0 : 2 * 100));
-                    canvas.Children.Add(number);
-                }
-                else if (i == 4 || i == 8)
-                {
-                    Canvas.SetTop(ellipse, 240);
-                    Canvas.SetLeft(ellipse, canvas.Width - 300 + (i == 8 ? 0 : 2 * 100));
-                    canvas.Children.Add(ellipse);
+                        Canvas.SetTop(number, 140);
+                        Canvas.SetLeft(number, canvas.Width - 270 + (i == 9 ? 0 : 2 * 100));
+                        break;
+                    case 4:
+                    case 8:
+                        Canvas.SetTop(ellipse, 240);
+                        Canvas.SetLeft(ellipse, canvas.Width - 300 + (i == 8 ? 0 : 2 * 100));
 
-                    Canvas.SetTop(number, 240);
-                    Canvas.SetLeft(number, canvas.Width - 270 + (i == 8 ? 0 : 2 * 100));
-                    canvas.Children.Add(number);
-                }
-                else
-                {
-                    Canvas.SetTop(ellipse, 340);
-                    Canvas.SetLeft(ellipse, canvas.Width - (100 + ((i - 5) * 100)));
-                    canvas.Children.Add(ellipse);
+                        Canvas.SetTop(number, 240);
+                        Canvas.SetLeft(number, canvas.Width - 270 + (i == 8 ? 0 : 2 * 100));
+                        break;
+                    default:
+                        Canvas.SetTop(ellipse, 340);
+                        Canvas.SetLeft(ellipse, canvas.Width - (100 + ((i - 5) * 100)));
 
-                    Canvas.SetTop(number, 340);
-                    Canvas.SetLeft(number, canvas.Width - (70 + ((i - 5) * 100)));
-                    canvas.Children.Add(number);
+                        Canvas.SetTop(number, 340);
+                        Canvas.SetLeft(number, canvas.Width - (70 + ((i - 5) * 100)));
+                        break;
                 }
+
+                canvas.Children.Add(ellipse);
+                canvas.Children.Add(number);
             }
         }
     }
