@@ -18,7 +18,7 @@ namespace UI
         private readonly Game Game;
         private readonly List<Sporter> NewVisitors = new List<Sporter>();
         private readonly List<Sporter> NewSporters = new List<Sporter>();
-        private readonly LinkedList<Sporter> FinishedSporters = new LinkedList<Sporter>();
+        private readonly List<Sporter> FinishedSporters = new List<Sporter>();
 
         public MainWindow()
         {
@@ -29,7 +29,7 @@ namespace UI
 
             DispatcherTimer = new DispatcherTimer(DispatcherPriority.Normal)
             {
-                Interval = TimeSpan.FromMilliseconds(100)
+                Interval = TimeSpan.FromMilliseconds(35)
             };
 
             Game.NieuweBezoeker += OnNieuweBezoeker;
@@ -46,7 +46,6 @@ namespace UI
         private void OnLijnenVerplaats(LijnenVerplaatsArgs e)
         {
             FinishedSporters.Remove(e.Sporter);
-
         }
 
         private void OnInstructieAfgelopen(InstructieAfgelopenArgs e)
@@ -60,7 +59,7 @@ namespace UI
             foreach (Sporter sporter in e.SportersKlaar)
             {
                 NewSporters.Remove(sporter);
-                FinishedSporters.AddLast(sporter);
+                FinishedSporters.Add(sporter);
             }
         }
 
@@ -69,12 +68,32 @@ namespace UI
             NewVisitors.Add(e.Sporter);
         }
 
+        private Rectangle CreateSporterRectangle(Sporter sporter)
+        {
+            var converter = new BrushConverter();
+
+            SolidColorBrush fillBrush = (SolidColorBrush)converter.ConvertFromString(sporter.KledingKleur);
+            SolidColorBrush strokeBrush = new SolidColorBrush(Colors.Black);
+
+            Rectangle sp = new Rectangle
+            {
+                Stroke = strokeBrush,
+                Fill = fillBrush,
+                Height = 20,
+                Width = 20,
+                RadiusX = 5,
+                RadiusY = 5
+            };
+
+            return sp;
+        }
+
         private void DrawGame(object sender, EventArgs e)
         {
             DrawGround();
             DrawInstructionQueue();
             DrawInstructionGroup();
-            //DrawQueue(FinishedSporters, 2);
+            DrawReadyToStartQueue();
             DrawWaterSkiLanes();
 
             label.Content = Game.ToString();
@@ -106,31 +125,6 @@ namespace UI
             Canvas.SetLeft(bottom, 0);
             Canvas.SetBottom(bottom, 0);
             canvas.Children.Add(bottom);
-        }
-
-        private void DrawNewVisitor(Sporter sporter, int offset, int leftOffset)
-        {
-            var converter = new BrushConverter();
-
-            SolidColorBrush fillBrush = (SolidColorBrush)converter.ConvertFromString(sporter.KledingKleur);
-            SolidColorBrush strokeBrush = new SolidColorBrush(Colors.Black);
-
-            Rectangle leftEllipse = new Rectangle
-            {
-                Stroke = strokeBrush,
-                Fill = fillBrush,
-                Height = 20,
-                Width = 20,
-                RadiusX = 5,
-                RadiusY = 5
-            };
-
-            int setLeft = 5 + ((leftOffset - 1) * 32);
-
-            Canvas.SetTop(leftEllipse, 5 + offset);
-            Canvas.SetLeft(leftEllipse, setLeft);
-
-            canvas.Children.Add(leftEllipse);
         }
 
         private void bt_start_Click(object sender, RoutedEventArgs e)
@@ -189,22 +183,7 @@ namespace UI
 
             for (int i = 0; i < NewVisitors.Count; i++)
             {
-                var sporter = NewVisitors[i];
-                var converter = new BrushConverter();
-
-                SolidColorBrush fillBrush = (SolidColorBrush)converter.ConvertFromString(sporter.KledingKleur);
-                SolidColorBrush strokeBrush = new SolidColorBrush(Colors.Black);
-
-                Rectangle sp = new Rectangle
-                {
-                    Stroke = strokeBrush,
-                    Fill = fillBrush,
-                    Height = 20,
-                    Width = 20,
-                    RadiusX = 5,
-                    RadiusY = 5
-                };
-
+                Rectangle sp = CreateSporterRectangle(NewVisitors[i]);
 
                 if (i < 20)
                 {
@@ -272,19 +251,7 @@ namespace UI
 
                 if (sporter != null)
                 {
-                    var converter = new BrushConverter();
-
-                    SolidColorBrush fillBrush = (SolidColorBrush)converter.ConvertFromString(sporter.KledingKleur);
-
-                    Rectangle place = new Rectangle()
-                    {
-                        Stroke = blackBrush,
-                        Fill = fillBrush,
-                        Width = 20,
-                        Height = 20,
-                        RadiusX = 5,
-                        RadiusY = 5
-                    };
+                    Rectangle place = CreateSporterRectangle(sporter);
 
                     if (i >= 1 && i <= 3)
                     {
@@ -299,6 +266,85 @@ namespace UI
                         canvas.Children.Add(place);
                     }
                 }
+            }
+        }
+
+        private void DrawReadyToStartQueue()
+        {
+            Line bottomFence = new Line()
+            {
+                Height = canvas.Height,
+                Fill = new SolidColorBrush(Colors.Black),
+                Stroke = new SolidColorBrush(Colors.Black),
+                X1 = 0,
+                X2 = 60,
+                Y1 = 0,
+                Y2 = 0
+            };
+
+            Canvas.SetTop(bottomFence, 505);
+            Canvas.SetRight(bottomFence, 380);
+            canvas.Children.Add(bottomFence);
+
+            Line rightFence = new Line()
+            {
+                Height = canvas.Height,
+                Fill = new SolidColorBrush(Colors.Black),
+                Stroke = new SolidColorBrush(Colors.Black),
+                X1 = 0,
+                X2 = 0,
+                Y1 = 0,
+                Y2 = 275
+            };
+
+            Canvas.SetTop(rightFence, 230);
+            Canvas.SetRight(rightFence, 380);
+            canvas.Children.Add(rightFence);
+
+            for (int i = 0; i < 2; i++)
+            {
+                Line fence = new Line()
+                {
+                    Height = canvas.Height,
+                    Fill = new SolidColorBrush(Colors.Black),
+                    Stroke = new SolidColorBrush(Colors.Black),
+                    X1 = 0,
+                    X2 = 0,
+                    Y1 = 0,
+                    Y2 = 305
+                };
+
+                Canvas.SetTop(fence, 200);
+
+                if (i == 0)
+                {
+                    Canvas.SetRight(fence, 440);
+                }
+                else
+                {
+                    Canvas.SetRight(fence, 410);
+                    fence.Y2 = 275;
+                }
+
+                canvas.Children.Add(fence);
+            }
+
+            for (int i = 0; i < FinishedSporters.Count; i++)
+            {
+                Rectangle sp = CreateSporterRectangle(FinishedSporters[i]);
+
+                if (i < 10)
+                {
+                    Canvas.SetTop(sp, 210 + (i * 30));
+                    Canvas.SetRight(sp, 385);
+                }
+                else
+                {
+                    Canvas.SetTop(sp, 480);
+                    Canvas.SetRight(sp, 415);
+                }
+
+                canvas.Children.Add(sp);
             }
         }
 
