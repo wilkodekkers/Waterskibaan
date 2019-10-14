@@ -13,7 +13,7 @@ namespace Waterskibaan
         public event Action<NieuweBezoekerArgs> NieuweBezoeker;
         public event Action<InstructieAfgelopenArgs> InstructieAfgelopen;
         public event Action<LijnenVerplaatsArgs> LijnenVerplaats;
-        public int TimeElapsed;
+        private int _timeElapsed;
 
         public void Initialize(DispatcherTimer timer)
         {
@@ -29,7 +29,7 @@ namespace Waterskibaan
 
         private void OnTimerElapsed(object source, EventArgs e)
         {
-            TimeElapsed++;
+            _timeElapsed++;
 
             Console.WriteLine(_waterskibaan);
             Console.WriteLine(_wachtrijInstrucie);
@@ -39,12 +39,12 @@ namespace Waterskibaan
 
         private void OnNieuweBezoeker(object source, EventArgs e)
         {
-            if (TimeElapsed % 3 != 0) return;
+            if (_timeElapsed % 3 != 0) return;
 
-            Sporter sporter = new Sporter(MoveCollection.GetWillekeurigeMoves());
-            NieuweBezoekerArgs args = new NieuweBezoekerArgs
+            var athlete = new Sporter(MoveCollection.GetWillekeurigeMoves());
+            var args = new NieuweBezoekerArgs
             {
-                Sporter = sporter
+                Sporter = athlete
             };
 
             NieuweBezoeker?.Invoke(args);
@@ -52,9 +52,9 @@ namespace Waterskibaan
 
         private void OnInstructieAfgelopen(object source, EventArgs e)
         {
-            if (TimeElapsed % 20 != 0) return;
+            if (_timeElapsed % 20 != 0) return;
 
-            InstructieAfgelopenArgs args = new InstructieAfgelopenArgs
+            var args = new InstructieAfgelopenArgs
             {
                 SportersKlaar = _instructieGroep.SportersVerlatenRij(5),
                 SportersNieuw = _wachtrijInstrucie.SportersVerlatenRij(5)
@@ -65,7 +65,7 @@ namespace Waterskibaan
 
         private void OnLijnenVerplaats(object source, EventArgs e)
         {
-            if (TimeElapsed % 4 != 0) return;
+            if (_timeElapsed % 4 != 0) return;
 
             _waterskibaan.VerplaatsKabel();
 
@@ -73,15 +73,16 @@ namespace Waterskibaan
 
             if (!_waterskibaan.Kabel.IsStartPositieLeeg()) return;
 
-            Sporter sporter = _wachtrijStarten.SportersVerlatenRij(1)[0];
-            sporter.Skies = new Skies();
-            sporter.Zwemvest = new Zwemvest();
+            var athlete = _wachtrijStarten.SportersVerlatenRij(1)[0];
+            athlete.Skies = new Skies();
+            athlete.Zwemvest = new Zwemvest();
 
-            _waterskibaan.SporterStart(sporter);
+            _waterskibaan.SporterStart(athlete);
 
-            LijnenVerplaatsArgs args = new LijnenVerplaatsArgs
+            var args = new LijnenVerplaatsArgs
             {
-                Sporter = sporter
+                Sporter = athlete,
+                Lijnen = _waterskibaan.Kabel.Lijnen
             };
 
             LijnenVerplaats?.Invoke(args);

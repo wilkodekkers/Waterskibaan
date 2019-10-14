@@ -19,6 +19,7 @@ namespace UI
         private readonly List<Sporter> _newVisitors = new List<Sporter>();
         private readonly List<Sporter> _newAthletes = new List<Sporter>();
         private readonly List<Sporter> _finishedAthletes = new List<Sporter>();
+        private LinkedList<Lijn> _lines = new LinkedList<Lijn>();
 
         public MainWindow()
         {
@@ -29,11 +30,11 @@ namespace UI
 
             _dispatcherTimer = new DispatcherTimer(DispatcherPriority.Normal)
             {
-                Interval = TimeSpan.FromMilliseconds(35)
+                Interval = TimeSpan.FromMilliseconds(200)
             };
 
             _game.NieuweBezoeker += OnNewVisitor;
-            _game.InstructieAfgelopen += OnFinishedInstruction;
+            _game.InstructieAfgelopen += OnInstructionFinished;
             _game.LijnenVerplaats += OnChangeLines;
 
             _dispatcherTimer.Tick += (source, args) => canvas.Children.Clear();
@@ -46,9 +47,10 @@ namespace UI
         private void OnChangeLines(LijnenVerplaatsArgs e)
         {
             _finishedAthletes.Remove(e.Sporter);
+            _lines = e.Lijnen;
         }
 
-        private void OnFinishedInstruction(InstructieAfgelopenArgs e)
+        private void OnInstructionFinished(InstructieAfgelopenArgs e)
         {
             foreach (var athlete in e.SportersNieuw)
             {
@@ -68,7 +70,7 @@ namespace UI
             _newVisitors.Add(e.Sporter);
         }
 
-        private static Rectangle CreateAthleteRectangle(Sporter athlete)
+        private static Rectangle CreateDrawableAthlete(Sporter athlete)
         {
             var converter = new BrushConverter();
             var fillBrush = (SolidColorBrush) converter.ConvertFromString(athlete.KledingKleur);
@@ -93,7 +95,7 @@ namespace UI
             DrawInstructionGroup();
             DrawReadyToStartQueue();
             DrawWaterSkiLanes();
-
+            
             label.Content = _game.ToString();
         }
 
@@ -173,7 +175,7 @@ namespace UI
 
             for (var i = 0; i < _newVisitors.Count; i++)
             {
-                var sp = CreateAthleteRectangle(_newVisitors[i]);
+                var sp = CreateDrawableAthlete(_newVisitors[i]);
 
                 if (i < 20)
                 {
@@ -240,8 +242,8 @@ namespace UI
                 var athlete = _newAthletes.Count >= i + 1 ? _newAthletes[i] : null;
 
                 if (athlete == null) continue;
-                
-                var place = CreateAthleteRectangle(athlete);
+
+                var place = CreateDrawableAthlete(athlete);
 
                 if (i >= 1 && i <= 3)
                 {
@@ -320,7 +322,7 @@ namespace UI
 
             for (var i = 0; i < _finishedAthletes.Count; i++)
             {
-                var sp = CreateAthleteRectangle(_finishedAthletes[i]);
+                var sp = CreateDrawableAthlete(_finishedAthletes[i]);
 
                 if (i < 10)
                 {
@@ -393,6 +395,57 @@ namespace UI
 
                 canvas.Children.Add(ellipse);
                 canvas.Children.Add(number);
+
+                foreach (var line in _lines)
+                {
+                    var athlete = CreateDrawableAthlete(line.Sporter);
+
+                    switch (line.PositieOpDeKabel)
+                    {
+                        case 0:
+                            Canvas.SetTop(athlete, 40);
+                            Canvas.SetLeft(athlete, canvas.Width - 300);
+                            break;
+                        case 1:
+                            Canvas.SetTop(athlete, 40);
+                            Canvas.SetLeft(athlete, canvas.Width - 200);
+                            break;
+                        case 2:
+                            Canvas.SetTop(athlete, 40);
+                            Canvas.SetLeft(athlete, canvas.Width - 100);
+                            break;
+                        case 3:
+                            Canvas.SetTop(athlete, 140);
+                            Canvas.SetLeft(athlete, canvas.Width - 100);
+                            break;
+                        case 4:
+                            Canvas.SetTop(athlete, 240);
+                            Canvas.SetLeft(athlete, canvas.Width - 100);
+                            break;
+                        case 5:
+                            Canvas.SetTop(athlete, 340);
+                            Canvas.SetLeft(athlete, canvas.Width - 100);
+                            break;
+                        case 6:
+                            Canvas.SetTop(athlete, 340);
+                            Canvas.SetLeft(athlete, canvas.Width - 200);
+                            break;
+                        case 7:
+                            Canvas.SetTop(athlete, 340);
+                            Canvas.SetLeft(athlete, canvas.Width - 300);
+                            break;
+                        case 8:
+                            Canvas.SetTop(athlete, 240);
+                            Canvas.SetLeft(athlete, canvas.Width - 300);
+                            break;
+                        case 9:
+                            Canvas.SetTop(athlete, 140);
+                            Canvas.SetLeft(athlete, canvas.Width - 300);
+                            break;
+                    }
+
+                    canvas.Children.Add(athlete);
+                }
             }
         }
     }
