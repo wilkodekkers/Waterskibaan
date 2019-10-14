@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Threading;
 
 namespace Waterskibaan
@@ -48,7 +50,7 @@ namespace Waterskibaan
                 Sporter = visitor
             };
             
-            _logger.AddVisitor(visitor);
+            _logger.Visitors.Add(visitor);
 
             NieuweBezoeker?.Invoke(args);
         }
@@ -101,8 +103,36 @@ namespace Waterskibaan
 
         public override string ToString()
         {
-            return
-                $"Waterskibaan \n\n {_waterskibaan} \n {_wachtrijInstrucie} \n {_instructieGroep} \n {_wachtrijStarten}";
+            var data = "Waterskibaan\n\n";
+            
+            data += $"{_waterskibaan}\n"; 
+            data += $"{_wachtrijInstrucie}\n"; 
+            data += $"{_instructieGroep}\n"; 
+            data += $"{_wachtrijStarten}\n\n";
+
+            data += $"Totaal aantal bezoekers: {_logger.Visitors.Count}\n";
+            if (_logger.Visitors.Count > 0)
+            {
+                var laps = 0;
+                var uniqueMoves = new List<string>();
+                
+                _logger.Visitors.ForEach(x => laps += Math.Abs(x.AantalRondenNogTeGaan));
+                _waterskibaan.Kabel.Lijnen.ToList().ForEach(line => line.Sporter.Moves.ForEach(move => uniqueMoves.Add(move.ToString())));
+                uniqueMoves = uniqueMoves.Distinct().ToList();
+                
+                data += $"Hoogste score: {_logger.Visitors.Max(x => x.Score)}\n";
+                data += $"Totaal aantal rondjes: {laps}\n";
+                data += $"Unieke moves: ";
+                uniqueMoves.ForEach(move => data += $"\n - {move}");
+            }
+            else
+            {
+                data += "Hoogste score: 0";
+                data += "Totaal aantal rondjes: 0";
+                data += "Unieke moves: []";
+            }
+
+            return data;
         }
     }
 }

@@ -4,16 +4,11 @@ namespace Waterskibaan
 {
     public class Logger
     {
-        private List<Sporter> Visitors { get; set; }
+        public List<Sporter> Visitors { get; }
 
         public Logger()
         {
             Visitors = new List<Sporter>();
-        }
-        
-        public void AddVisitor(Sporter visitor)
-        {
-            Visitors.Add(visitor);
         }
     }
 }

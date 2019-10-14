@@ -34,10 +34,10 @@ namespace Waterskibaan
                 throw new Exception("Een sporter heeft skies en een zwemvest nodig!");
             }
 
-            Lijn lijn = LijnenVoorraad.VerwijderEersteLijn();
-            lijn.Sporter = sp;
+            var line = LijnenVoorraad.VerwijderEersteLijn();
+            line.Sporter = sp;
             sp.AantalRondenNogTeGaan = new Random().Next(1, 3);
-            Kabel.NeemLijnInGebruik(lijn);
+            Kabel.NeemLijnInGebruik(line);
         }
 
         public override string ToString()
