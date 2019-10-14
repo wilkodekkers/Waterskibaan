@@ -400,51 +400,126 @@ namespace UI
                 {
                     var athlete = CreateDrawableAthlete(line.Sporter);
 
+                    TextBlock move = null;
+                    
+                    if (line.Sporter.HuidigeMove != null)
+                    {
+                        move = new TextBlock()
+                        {
+                            Text = line.Sporter.HuidigeMove.ToString(),
+                            Foreground = new SolidColorBrush(Colors.Black)
+                        };   
+                    }
+
                     switch (line.PositieOpDeKabel)
                     {
                         case 0:
                             Canvas.SetTop(athlete, 40);
                             Canvas.SetLeft(athlete, canvas.Width - 300);
+
+                            if (move != null)
+                            {
+                                Canvas.SetTop(move, 20);
+                                Canvas.SetLeft(move, canvas.Width - 300);
+                            }
                             break;
                         case 1:
                             Canvas.SetTop(athlete, 40);
                             Canvas.SetLeft(athlete, canvas.Width - 200);
+                            
+                            if (move != null)
+                            {
+                                Canvas.SetTop(move, 20);
+                                Canvas.SetLeft(move, canvas.Width - 200);
+                            }
                             break;
                         case 2:
                             Canvas.SetTop(athlete, 40);
                             Canvas.SetLeft(athlete, canvas.Width - 100);
+                            
+                            if (move != null)
+                            {
+                                Canvas.SetTop(move, 20);
+                                Canvas.SetLeft(move, canvas.Width - 100);
+                            }
                             break;
                         case 3:
                             Canvas.SetTop(athlete, 140);
                             Canvas.SetLeft(athlete, canvas.Width - 100);
+                            
+                            if (move != null)
+                            {
+                                Canvas.SetTop(move, 120);
+                                Canvas.SetLeft(move, canvas.Width - 100);
+                            }
                             break;
                         case 4:
                             Canvas.SetTop(athlete, 240);
                             Canvas.SetLeft(athlete, canvas.Width - 100);
+                            
+                            if (move != null)
+                            {
+                                Canvas.SetTop(move, 220);
+                                Canvas.SetLeft(move, canvas.Width - 100);
+                            }
                             break;
                         case 5:
                             Canvas.SetTop(athlete, 340);
                             Canvas.SetLeft(athlete, canvas.Width - 100);
+                            
+                            if (move != null)
+                            {
+                                Canvas.SetTop(move, 320);
+                                Canvas.SetLeft(move, canvas.Width - 100);
+                            }
                             break;
                         case 6:
                             Canvas.SetTop(athlete, 340);
                             Canvas.SetLeft(athlete, canvas.Width - 200);
+                            
+                            if (move != null)
+                            {
+                                Canvas.SetTop(move, 320);
+                                Canvas.SetLeft(move, canvas.Width - 200);
+                            }
                             break;
                         case 7:
                             Canvas.SetTop(athlete, 340);
                             Canvas.SetLeft(athlete, canvas.Width - 300);
+                            
+                            if (move != null)
+                            {
+                                Canvas.SetTop(move, 320);
+                                Canvas.SetLeft(move, canvas.Width - 300);
+                            }
                             break;
                         case 8:
                             Canvas.SetTop(athlete, 240);
                             Canvas.SetLeft(athlete, canvas.Width - 300);
+                            
+                            if (move != null)
+                            {
+                                Canvas.SetTop(move, 220);
+                                Canvas.SetLeft(move, canvas.Width - 300);
+                            }
                             break;
                         case 9:
                             Canvas.SetTop(athlete, 140);
                             Canvas.SetLeft(athlete, canvas.Width - 300);
+                            
+                            if (move != null)
+                            {
+                                Canvas.SetTop(move, 120);
+                                Canvas.SetLeft(move, canvas.Width - 300);
+                            }
                             break;
                     }
 
                     canvas.Children.Add(athlete);
+                    if (move != null)
+                    {
+                        canvas.Children.Add(move);
+                    }
                 }
             }
         }

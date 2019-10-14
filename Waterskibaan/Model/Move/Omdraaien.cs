@@ -12,5 +12,9 @@ namespace Waterskibaan
         {
             return new Random().Next(100) > 50 ? 3 : 0;
         }
+        public override string ToString()
+        {
+            return "Omdraaien";
+        }
     }
 }

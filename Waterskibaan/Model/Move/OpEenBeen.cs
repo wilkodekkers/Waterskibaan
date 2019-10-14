@@ -12,5 +12,10 @@ namespace Waterskibaan
         {
             return new Random().Next(100) > 60 ? 4 : 0;
         }
+        
+        public override string ToString()
+        {
+            return "Op een been";
+        }
     }
 }

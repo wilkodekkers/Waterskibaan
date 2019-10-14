@@ -79,6 +79,14 @@ namespace Waterskibaan
 
             _waterskibaan.SporterStart(athlete);
 
+            var random = new Random();
+            
+            foreach (var line in _waterskibaan.Kabel.Lijnen)
+            {
+                line.Sporter.HuidigeMove = random.Next(0, 100) <= 25 ? line.Sporter.Moves[random.Next(0, line.Sporter.Moves.Count)] : null;
+                line.Sporter.Score += line.Sporter.HuidigeMove?.Move() ?? 0;
+            }
+
             var args = new LijnenVerplaatsArgs
             {
                 Sporter = athlete,
@@ -90,7 +98,8 @@ namespace Waterskibaan
 
         public override string ToString()
         {
-            return $"Waterskibaan \n\n {_waterskibaan} \n {_wachtrijInstrucie} \n {_instructieGroep} \n {_wachtrijStarten}";
+            return
+                $"Waterskibaan \n\n {_waterskibaan} \n {_wachtrijInstrucie} \n {_instructieGroep} \n {_wachtrijStarten}";
         }
     }
 }
