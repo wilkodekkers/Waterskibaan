@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Threading;
+using System.Windows.Media;
 
 namespace Waterskibaan
 {
@@ -49,7 +50,7 @@ namespace Waterskibaan
             {
                 Sporter = visitor
             };
-            
+
             _logger.Visitors.Add(visitor);
 
             NieuweBezoeker?.Invoke(args);
@@ -85,7 +86,7 @@ namespace Waterskibaan
             _waterskibaan.SporterStart(athlete);
 
             var random = new Random();
-            
+
             foreach (var line in _waterskibaan.Kabel.Lijnen)
             {
                 line.Sporter.HuidigeMove = random.Next(0, 100) <= 25 ? line.Sporter.Moves[random.Next(0, line.Sporter.Moves.Count)] : null;
@@ -101,13 +102,22 @@ namespace Waterskibaan
             LijnenVerplaats?.Invoke(args);
         }
 
+        private bool ColorsAreClose(Color a, Color z, int threshold)
+        {
+            int r = a.R - z.R;
+            int g = a.G - z.G;
+            int b = a.B - z.B;
+
+            return (r * r + g * g + b * b) <= threshold * threshold;
+        }
+
         public override string ToString()
         {
             var data = "Waterskibaan\n\n";
-            
-            data += $"{_waterskibaan}\n"; 
-            data += $"{_wachtrijInstrucie}\n"; 
-            data += $"{_instructieGroep}\n"; 
+
+            data += $"{_waterskibaan}\n";
+            data += $"{_wachtrijInstrucie}\n";
+            data += $"{_instructieGroep}\n";
             data += $"{_wachtrijStarten}\n\n";
 
             data += $"Totaal aantal bezoekers: {_logger.Visitors.Count}\n";
@@ -115,12 +125,23 @@ namespace Waterskibaan
             {
                 var laps = 0;
                 var uniqueMoves = new List<string>();
-                
+                var amountOfRedClothing = 0;
+
                 _logger.Visitors.ForEach(x => laps += Math.Abs(x.AantalRondenNogTeGaan));
                 _waterskibaan.Kabel.Lijnen.ToList().ForEach(line => line.Sporter.Moves.ForEach(move => uniqueMoves.Add(move.ToString())));
                 uniqueMoves = uniqueMoves.Distinct().ToList();
-                
+                _logger.Visitors.ForEach(x =>
+                {
+                    Color color = Color.FromRgb(x.KledingKleur.Item1, x.KledingKleur.Item2, x.KledingKleur.Item3);
+
+                    if (ColorsAreClose(color, Colors.Red, 100))
+                    {
+                        amountOfRedClothing++;
+                    }
+                });
+
                 data += $"Hoogste score: {_logger.Visitors.Max(x => x.Score)}\n";
+                data += $"Aantal bezoekers met rode kleding: {amountOfRedClothing}\n";
                 data += $"Totaal aantal rondjes: {laps}\n";
                 data += $"Unieke moves: ";
                 uniqueMoves.ForEach(move => data += $"\n - {move}");
@@ -128,6 +149,7 @@ namespace Waterskibaan
             else
             {
                 data += "Hoogste score: 0";
+                data += "Aantal bezoekers met rode kleding: 0";
                 data += "Totaal aantal rondjes: 0";
                 data += "Unieke moves: []";
             }

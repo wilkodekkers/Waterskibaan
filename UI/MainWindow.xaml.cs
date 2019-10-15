@@ -72,8 +72,7 @@ namespace UI
 
         private static Rectangle CreateDrawableAthlete(Sporter athlete)
         {
-            var converter = new BrushConverter();
-            var fillBrush = (SolidColorBrush) converter.ConvertFromString(athlete.KledingKleur);
+            var fillBrush = new SolidColorBrush(Color.FromRgb(athlete.KledingKleur.Item1, athlete.KledingKleur.Item2, athlete.KledingKleur.Item3));
             var strokeBrush = new SolidColorBrush(Colors.Black);
             var sp = new Rectangle
             {

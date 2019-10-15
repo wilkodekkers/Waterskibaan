@@ -10,5 +10,7 @@ namespace Waterskibaan
         {
             Visitors = new List<Sporter>();
         }
+
+
     }
 }

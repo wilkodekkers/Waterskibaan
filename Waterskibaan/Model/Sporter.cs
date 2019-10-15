@@ -7,7 +7,7 @@ namespace Waterskibaan
     {
         public int AantalRondenNogTeGaan { get; set; }
         public Zwemvest Zwemvest { get; set; }
-        public string KledingKleur { get; set; }
+        public Tuple<byte, byte, byte> KledingKleur { get; set; }
         public Skies Skies { get; set; }
         public List<IMoves> Moves { get; set; }
         public int Score { get; set; }
@@ -21,7 +21,7 @@ namespace Waterskibaan
             HuidigeMove = null;
 
             Random random = new Random();
-            KledingKleur = string.Format("#{0:X6}", random.Next(0x1000000));
+            KledingKleur = new Tuple<byte, byte, byte>(Convert.ToByte(random.Next(0, 256)), Convert.ToByte(random.Next(0, 256)), Convert.ToByte(random.Next(0, 256)));
         }
     }
 }
