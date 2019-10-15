@@ -130,18 +130,22 @@ namespace Waterskibaan
                 _logger.Visitors.ForEach(x => laps += Math.Abs(x.AantalRondenNogTeGaan));
                 _waterskibaan.Kabel.Lijnen.ToList().ForEach(line => line.Sporter.Moves.ForEach(move => uniqueMoves.Add(move.ToString())));
                 uniqueMoves = uniqueMoves.Distinct().ToList();
-                _logger.Visitors.ForEach(x =>
-                {
-                    Color color = Color.FromRgb(x.KledingKleur.Item1, x.KledingKleur.Item2, x.KledingKleur.Item3);
-
-                    if (ColorsAreClose(color, Colors.Red, 100))
-                    {
-                        amountOfRedClothing++;
-                    }
-                });
 
                 data += $"Hoogste score: {_logger.Visitors.Max(x => x.Score)}\n";
-                data += $"Aantal bezoekers met rode kleding: {amountOfRedClothing}\n";
+                data += "Aantal bezoekers met rode kleding: " + String.Join("", _logger.Visitors.Where(s =>
+                {
+                    Color color = Color.FromRgb(s.KledingKleur.Item1, s.KledingKleur.Item2, s.KledingKleur.Item3);
+                    return ColorsAreClose(color, Colors.Red, 100);
+                }).ToList().Count);
+
+                data += "\n";
+
+                data += string.Join("", _logger.Visitors.OrderByDescending(a =>
+                {
+                    var color = Color.FromRgb(a.KledingKleur.Item1, a.KledingKleur.Item2, a.KledingKleur.Item3);
+                    return (color.R * color.R + color.G * color.G + color.B * color.B);
+                }).Take(10).Select(s => s.KledingKleur + "\n"));
+
                 data += $"Totaal aantal rondjes: {laps}\n";
                 data += $"Unieke moves: ";
                 uniqueMoves.ForEach(move => data += $"\n - {move}");
@@ -150,6 +154,7 @@ namespace Waterskibaan
             {
                 data += "Hoogste score: 0";
                 data += "Aantal bezoekers met rode kleding: 0";
+                data += "Lichste kleding: []";
                 data += "Totaal aantal rondjes: 0";
                 data += "Unieke moves: []";
             }
