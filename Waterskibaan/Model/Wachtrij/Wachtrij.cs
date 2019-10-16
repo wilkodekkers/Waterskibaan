@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Waterskibaan
 {
@@ -19,10 +16,6 @@ namespace Waterskibaan
             if (CheckAantal(_queue.Count + 1))
             {
                 _queue.Enqueue(sporter);
-            }
-            else
-            {
-                throw new Exception("De wachtrij is vol!");
             }
         }
 

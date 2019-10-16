@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
+﻿using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using System.Windows.Threading;
 using Waterskibaan;
 
 namespace UI
@@ -13,10 +10,10 @@ namespace UI
     {
         private Canvas Canvas { get; set; }
         private Game Game { get; set; }
-        private readonly List<Sporter> _newVisitors = new List<Sporter>();
-        private readonly List<Sporter> _newAthletes = new List<Sporter>();
-        private readonly List<Sporter> _finishedAthletes = new List<Sporter>();
-        private LinkedList<Lijn> _lines = new LinkedList<Lijn>();
+        private List<Sporter> NewVisitors { get; set; } = new List<Sporter>();
+        private List<Sporter> NewAthletes { get; set; } = new List<Sporter>();
+        private List<Sporter> FinishedAthletes { get; set; } = new List<Sporter>();
+        private LinkedList<Lijn> Lines { get; set; } = new LinkedList<Lijn>();
 
         public CanvasRenderer(Canvas canvas, Game game)
         {
@@ -30,28 +27,28 @@ namespace UI
 
         private void OnNewVisitor(NieuweBezoekerArgs args)
         {
-            _newVisitors.Add(args.Sporter);
+            NewVisitors.Add(args.Sporter);
         }
 
         private void OnInstructionFinished(InstructieAfgelopenArgs args)
         {
             foreach (var athlete in args.SportersNieuw)
             {
-                _newVisitors.Remove(athlete);
-                _newAthletes.Add(athlete);
+                NewVisitors.Remove(athlete);
+                NewAthletes.Add(athlete);
             }
 
             foreach (var athlete in args.SportersKlaar)
             {
-                _newAthletes.Remove(athlete);
-                _finishedAthletes.Add(athlete);
+                NewAthletes.Remove(athlete);
+                FinishedAthletes.Add(athlete);
             }
         }
 
         private void OnChangeLines(LijnenVerplaatsArgs args)
         {
-            _finishedAthletes.Remove(args.Sporter);
-            _lines = args.Lijnen;
+            FinishedAthletes.Remove(args.Sporter);
+            Lines = args.Lijnen;
         }
 
         private static Rectangle CreateDrawableAthlete(Sporter athlete)
@@ -144,9 +141,9 @@ namespace UI
                 Canvas.Children.Add(line);
             }
 
-            for (var i = 0; i < _newVisitors.Count; i++)
+            for (var i = 0; i < NewVisitors.Count; i++)
             {
-                var sp = CreateDrawableAthlete(_newVisitors[i]);
+                var sp = CreateDrawableAthlete(NewVisitors[i]);
 
                 if (i < 20)
                 {
@@ -210,7 +207,7 @@ namespace UI
 
             for (var i = 0; i < 5; i++)
             {
-                var athlete = _newAthletes.Count >= i + 1 ? _newAthletes[i] : null;
+                var athlete = NewAthletes.Count >= i + 1 ? NewAthletes[i] : null;
 
                 if (athlete == null) continue;
 
@@ -291,9 +288,9 @@ namespace UI
                 Canvas.Children.Add(fence);
             }
 
-            for (var i = 0; i < _finishedAthletes.Count; i++)
+            for (var i = 0; i < FinishedAthletes.Count; i++)
             {
-                var sp = CreateDrawableAthlete(_finishedAthletes[i]);
+                var sp = CreateDrawableAthlete(FinishedAthletes[i]);
 
                 if (i < 10)
                 {
@@ -367,7 +364,7 @@ namespace UI
                 Canvas.Children.Add(ellipse);
                 Canvas.Children.Add(number);
 
-                foreach (var line in _lines)
+                foreach (var line in Lines)
                 {
                     var athlete = CreateDrawableAthlete(line.Sporter);
 

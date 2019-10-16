@@ -46,7 +46,6 @@ namespace UI
         private void DrawGame(object sender, EventArgs e)
         {
             _canvasRenderer.Render();
-            
             label.Content = _game.ToString();
         }
 
