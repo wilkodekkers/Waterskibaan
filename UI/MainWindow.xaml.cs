@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Shapes;
 using System.Windows.Threading;
-using System.Collections.Generic;
+using UI.Renderer;
 using Waterskibaan;
 
 namespace UI
@@ -47,12 +44,12 @@ namespace UI
             _dataRenderer.Render();
         }
 
-        private void bt_start_Click(object sender, RoutedEventArgs e)
+        private void Bt_start_Click(object sender, RoutedEventArgs e)
         {
             _dispatcherTimer.Start();
         }
 
-        private void bt_stop_Click(object sender, RoutedEventArgs e)
+        private void Bt_stop_Click(object sender, RoutedEventArgs e)
         {
             _dispatcherTimer.Stop();
         }

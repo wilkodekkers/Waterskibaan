@@ -1,49 +1,53 @@
-﻿using System.Collections.Generic;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Shapes;
-using UI.Renderer;
 using Waterskibaan;
 
-namespace UI
+namespace UI.Renderer
 {
     class DataRenderer : IRenderer
     {
-        private Logger Logger { get; set; }
-        private MainWindow MainWindow { get; set; }
+        private Logger _logger;
+        private MainWindow _mainWindow;
 
         public DataRenderer(Logger logger, MainWindow mainWindow)
         {
-            Logger = logger;
-            MainWindow = mainWindow;
+            _logger = logger;
+            _mainWindow = mainWindow;
+        }
+
+        private Label CreateColorLabel(Color color)
+        {
+            return new Label()
+            {
+                Content = color,
+                Background = new SolidColorBrush(color)
+            };
+        }
+
+        private Label CreateMoveLabel(IMoves move)
+        {
+            return new Label()
+            {
+                Content = move.ToString(),
+                Background = new SolidColorBrush(Colors.LightGray)
+            };
         }
 
         public void Render()
         {
-            MainWindow.lb_amountOfVisitors.Content = $"Aantal bezoekers: {Logger.GetAmountOfVisitors()}";
-            MainWindow.lb_highestScore.Content = $"Hoogste behaalde score: {Logger.GetHighestScore()}";
-            MainWindow.lb_amountOfVisitorsWithRedClothes.Content = $"Aantal bezoekers met rode kleding: {Logger.GetAmountOfAthletesWithRedClothes()}";
-            MainWindow.sp_colors.Children.Clear();
-            foreach (Color color in Logger.GetListWithLightestClothes())
-            {
-                Label label = new Label
-                {
-                    Content = color,
-                    Background = new SolidColorBrush(color)
-                };
-                MainWindow.sp_colors.Children.Add(label);
-            }
-            MainWindow.lb_amountOfLabs.Content = $"Aantal rondes: {Logger.GetAmountOfLaps()}";
-            MainWindow.sp_moves.Children.Clear();
-            foreach (IMoves move in Logger.GetUniqueMoves())
-            {
-                Label label = new Label
-                {
-                    Content = move.ToString(),
-                    Background = new SolidColorBrush(Colors.LightGray)
-                };
-                MainWindow.sp_moves.Children.Add(label);
-            }
+            _mainWindow.sp_colors.Children.Clear();
+            _mainWindow.sp_moves.Children.Clear();
+
+            _mainWindow.lb_amountOfVisitors.Content = $"Aantal bezoekers: {_logger.GetAmountOfVisitors()}";
+            _mainWindow.lb_highestScore.Content = $"Hoogste behaalde score: {_logger.GetHighestScore()}";
+            _mainWindow.lb_amountOfVisitorsWithRedClothes.Content = $"Aantal bezoekers met rode kleding: {_logger.GetAmountOfAthletesWithRedClothes()}";
+            _logger
+                .GetListWithLightestClothes()
+                .ForEach(color => _mainWindow.sp_colors.Children.Add(CreateColorLabel(color)));
+            _mainWindow.lb_amountOfLabs.Content = $"Aantal rondes: {_logger.GetAmountOfLaps()}";
+            _logger
+                .GetUniqueMoves()
+                .ForEach(move => _mainWindow.sp_moves.Children.Add(CreateMoveLabel(move)));
         }
     }
 }
