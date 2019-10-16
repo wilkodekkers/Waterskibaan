@@ -12,9 +12,15 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="652" VerticalAlignment="Bottom" Width="778" Background="#FF6DA3CF" Margin="10,0,0,10.5" />
-        <Label x:Name="label" Content="Waterskibaan Data" Margin="10.5,10,10,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" Height="607" Width="777" Grid.Column="1"/>
+        <Label x:Name="label" Content="Waterskibaan Data" Margin="10.5,10,10,0" FontWeight="Bold" FontSize="20" HorizontalAlignment="Center" Width="777" Height="40" VerticalAlignment="Top" Grid.Column="1"/>
         <Button x:Name="bt_start" Content="Start" Grid.Column="1" HorizontalAlignment="Left" Margin="582.5,622,0,10.5" Width="100" Click="bt_start_Click"/>
         <Button x:Name="bt_stop" Content="Stop" Grid.Column="1" Margin="687.5,622,10,10.5" Click="bt_stop_Click"/>
+        <Label x:Name="lb_amountOfVisitors" Content="Label" Grid.Column="1" HorizontalAlignment="Left" Margin="10.5,55,0,0" VerticalAlignment="Top" Width="777"/>
+        <Label x:Name="lb_highestScore" Content="Label" Grid.Column="1" HorizontalAlignment="Left" Margin="10.5,81,0,0" VerticalAlignment="Top" Width="776"/>
+        <Label x:Name="lb_amountOfVisitorsWithRedClothes" Content="Label" Grid.Column="1" HorizontalAlignment="Left" Margin="10.5,107,0,0" VerticalAlignment="Top"/>
+        <StackPanel x:Name="sp_colors" Grid.Column="1" HorizontalAlignment="Left" Height="279" Margin="10.5,133,0,0" VerticalAlignment="Top" Width="777"/>
+        <Label x:Name="lb_amountOfLabs" Content="Label" Grid.Column="1" HorizontalAlignment="Left" Margin="10.5,412,0,0" VerticalAlignment="Top"/>
+        <StackPanel x:Name="sp_moves" Grid.Column="1" HorizontalAlignment="Left" Height="179" Margin="10.5,438,0,0" VerticalAlignment="Top" Width="777"/>
 
     </Grid>
 </Window>

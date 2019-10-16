@@ -12,12 +12,17 @@ namespace Waterskibaan
         private readonly WachtrijInstructie _wachtrijInstrucie = new WachtrijInstructie();
         private readonly InstructieGroep _instructieGroep = new InstructieGroep();
         private readonly WachtrijStarten _wachtrijStarten = new WachtrijStarten();
-        private readonly Logger _logger = new Logger();
+        public readonly Logger logger = new Logger();
 
         public event Action<NieuweBezoekerArgs> NieuweBezoeker;
         public event Action<InstructieAfgelopenArgs> InstructieAfgelopen;
         public event Action<LijnenVerplaatsArgs> LijnenVerplaats;
         private int _timeElapsed;
+
+        public Game()
+        {
+            logger.Kabel = _waterskibaan.Kabel;
+        }
 
         public void Initialize(DispatcherTimer timer)
         {
@@ -51,7 +56,7 @@ namespace Waterskibaan
                 Sporter = visitor
             };
 
-            _logger.Visitors.Add(visitor);
+            logger.AddVisitor(visitor);
 
             NieuweBezoeker?.Invoke(args);
         }
@@ -100,66 +105,6 @@ namespace Waterskibaan
             };
 
             LijnenVerplaats?.Invoke(args);
-        }
-
-        private bool ColorsAreClose(Color a, Color z, int threshold)
-        {
-            int r = a.R - z.R;
-            int g = a.G - z.G;
-            int b = a.B - z.B;
-
-            return (r * r + g * g + b * b) <= threshold * threshold;
-        }
-
-        public override string ToString()
-        {
-            var data = "Waterskibaan\n\n";
-
-            data += $"{_waterskibaan}\n";
-            data += $"{_wachtrijInstrucie}\n";
-            data += $"{_instructieGroep}\n";
-            data += $"{_wachtrijStarten}\n\n";
-
-            data += $"Totaal aantal bezoekers: {_logger.Visitors.Count}\n";
-            if (_logger.Visitors.Count > 0)
-            {
-                var laps = 0;
-                var uniqueMoves = new List<string>();
-
-                _logger.Visitors.ForEach(x => laps += Math.Abs(x.AantalRondenNogTeGaan));
-                _waterskibaan.Kabel.Lijnen.ToList().ForEach(line => line.Sporter.Moves.ForEach(move => uniqueMoves.Add(move.ToString())));
-                uniqueMoves = uniqueMoves.Distinct().ToList();
-
-                data += $"Hoogste score: {_logger.Visitors.Max(x => x.Score)}\n";
-
-                data += "Aantal bezoekers met rode kleding: " + String.Join("", _logger.Visitors.Where(s =>
-                {
-                    Color color = Color.FromRgb(s.KledingKleur.Item1, s.KledingKleur.Item2, s.KledingKleur.Item3);
-                    return ColorsAreClose(color, Colors.Red, 100);
-                }).ToList().Count);
-
-                data += "\n";
-
-                data += string.Join("", _logger.Visitors.OrderByDescending(a =>
-                {
-                    var color = Color.FromRgb(a.KledingKleur.Item1, a.KledingKleur.Item2, a.KledingKleur.Item3);
-                    return (color.R * color.R + color.G * color.G + color.B * color.B);
-                }).Take(10).Select(s => s.KledingKleur + "\n"));
-
-                data += $"Totaal aantal rondjes: {laps}\n";
-                data += $"Unieke moves: ";
-                uniqueMoves.ForEach(move => data += $"\n - {move}");
-            }
-            else
-            {
-                data += "Hoogste score: 0";
-                data += "Aantal bezoekers met rode kleding: 0";
-                data += "Lichste kleding: []";
-                data += "Totaal aantal rondjes: 0";
-                data += "Unieke moves: []";
-            }
-
-            return data;
         }
     }
 }

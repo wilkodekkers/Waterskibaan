@@ -9,7 +9,6 @@ namespace UI
     class CanvasRenderer
     {
         private Canvas Canvas { get; set; }
-        private Game Game { get; set; }
         private List<Sporter> NewVisitors { get; set; } = new List<Sporter>();
         private List<Sporter> NewAthletes { get; set; } = new List<Sporter>();
         private List<Sporter> FinishedAthletes { get; set; } = new List<Sporter>();
@@ -18,11 +17,10 @@ namespace UI
         public CanvasRenderer(Canvas canvas, Game game)
         {
             Canvas = canvas;
-            Game = game;
 
-            Game.NieuweBezoeker += OnNewVisitor;
-            Game.InstructieAfgelopen += OnInstructionFinished;
-            Game.LijnenVerplaats += OnChangeLines;
+            game.NieuweBezoeker += OnNewVisitor;
+            game.InstructieAfgelopen += OnInstructionFinished;
+            game.LijnenVerplaats += OnChangeLines;
         }
 
         private void OnNewVisitor(NieuweBezoekerArgs args)

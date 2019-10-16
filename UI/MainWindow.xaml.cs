@@ -16,10 +16,6 @@ namespace UI
     {
         private readonly DispatcherTimer _dispatcherTimer;
         private readonly Game _game;
-        private readonly List<Sporter> _newVisitors = new List<Sporter>();
-        private readonly List<Sporter> _newAthletes = new List<Sporter>();
-        private readonly List<Sporter> _finishedAthletes = new List<Sporter>();
-        private LinkedList<Lijn> _lines = new LinkedList<Lijn>();
         private readonly CanvasRenderer _canvasRenderer;
 
         public MainWindow()
@@ -31,7 +27,7 @@ namespace UI
 
             _dispatcherTimer = new DispatcherTimer(DispatcherPriority.Normal)
             {
-                Interval = TimeSpan.FromMilliseconds(200)
+                Interval = TimeSpan.FromMilliseconds(100)
             };
 
             _canvasRenderer = new CanvasRenderer(canvas, _game);
@@ -46,7 +42,30 @@ namespace UI
         private void DrawGame(object sender, EventArgs e)
         {
             _canvasRenderer.Render();
-            label.Content = _game.ToString();
+
+            lb_amountOfVisitors.Content = $"Aantal bezoekers: {_game.logger.GetAmountOfVisitors()}";
+            lb_highestScore.Content = $"Hoogste behaalde score: {_game.logger.GetHighestScore()}";
+            lb_amountOfVisitorsWithRedClothes.Content = $"Aantal bezoekers met rode kleding: {_game.logger.GetAmountOfAthletesWithRedClothes()}";
+            sp_colors.Children.Clear();
+            foreach (Color color in _game.logger.GetListWithLightestClothes())
+            {
+                Label label = new Label
+                {
+                    Content = color,
+                    Background = new SolidColorBrush(color)
+                };
+                sp_colors.Children.Add(label);
+            }
+            lb_amountOfLabs.Content = $"Aantal rondes: {_game.logger.GetAmountOfLaps()}";
+            sp_moves.Children.Clear();
+            foreach (string move in _game.logger.GetUniqueMoves())
+            {
+                Label label = new Label
+                {
+                    Content = move
+                };
+                sp_moves.Children.Add(label);
+            }
         }
 
         private void bt_start_Click(object sender, RoutedEventArgs e)

@@ -6,32 +6,31 @@ namespace Waterskibaan
     public abstract class Wachtrij
     {
         public virtual int MaxLengteRij { get => 5; }
-
-        private Queue<Sporter> _queue = new Queue<Sporter>();
+        private Queue<Sporter> Queue { get; set; } = new Queue<Sporter>();
 
         public abstract bool CheckAantal(int aantal);
 
         public void SporterNeemPlaatsInRij(Sporter sporter)
         {
-            if (CheckAantal(_queue.Count + 1))
+            if (CheckAantal(Queue.Count + 1))
             {
-                _queue.Enqueue(sporter);
+                Queue.Enqueue(sporter);
             }
         }
 
         public List<Sporter> GetAlleSporters()
         {
-            return _queue.ToList();
+            return Queue.ToList();
         }
 
         public List<Sporter> SportersVerlatenRij(int aantal)
         {
-            int amount = aantal > _queue.Count ? _queue.Count : aantal;
+            int amount = aantal > Queue.Count ? Queue.Count : aantal;
             List<Sporter> sporters = new List<Sporter>();
 
             for (int i = 0; i < amount; i++)
             {
-                sporters.Add(_queue.Dequeue());
+                sporters.Add(Queue.Dequeue());
             }
 
             return sporters;
@@ -39,7 +38,7 @@ namespace Waterskibaan
 
         public override string ToString()
         {
-            return $"Wachtrij: {_queue.Count} sporters";
+            return $"Wachtrij: {Queue.Count} sporters";
         }
     }
 }
