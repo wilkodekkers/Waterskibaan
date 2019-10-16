@@ -17,6 +17,7 @@ namespace UI
         private readonly DispatcherTimer _dispatcherTimer;
         private readonly Game _game;
         private readonly CanvasRenderer _canvasRenderer;
+        private readonly DataRenderer _dataRenderer;
 
         public MainWindow()
         {
@@ -31,6 +32,7 @@ namespace UI
             };
 
             _canvasRenderer = new CanvasRenderer(canvas, _game);
+            _dataRenderer = new DataRenderer(_game.logger, this);
 
             _dispatcherTimer.Tick += (source, args) => canvas.Children.Clear();
             _dispatcherTimer.Tick += DrawGame;
@@ -42,31 +44,7 @@ namespace UI
         private void DrawGame(object sender, EventArgs e)
         {
             _canvasRenderer.Render();
-
-            lb_amountOfVisitors.Content = $"Aantal bezoekers: {_game.logger.GetAmountOfVisitors()}";
-            lb_highestScore.Content = $"Hoogste behaalde score: {_game.logger.GetHighestScore()}";
-            lb_amountOfVisitorsWithRedClothes.Content = $"Aantal bezoekers met rode kleding: {_game.logger.GetAmountOfAthletesWithRedClothes()}";
-            sp_colors.Children.Clear();
-            foreach (Color color in _game.logger.GetListWithLightestClothes())
-            {
-                Label label = new Label
-                {
-                    Content = color,
-                    Background = new SolidColorBrush(color)
-                };
-                sp_colors.Children.Add(label);
-            }
-            lb_amountOfLabs.Content = $"Aantal rondes: {_game.logger.GetAmountOfLaps()}";
-            sp_moves.Children.Clear();
-            foreach (string move in _game.logger.GetUniqueMoves())
-            {
-                Label label = new Label
-                {
-                    Content = move,
-                    Background = new SolidColorBrush(Colors.LightGray)
-                };
-                sp_moves.Children.Add(label);
-            }
+            _dataRenderer.Render();
         }
 
         private void bt_start_Click(object sender, RoutedEventArgs e)

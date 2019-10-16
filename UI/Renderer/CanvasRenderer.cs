@@ -2,11 +2,12 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using UI.Renderer;
 using Waterskibaan;
 
 namespace UI
 {
-    class CanvasRenderer
+    class CanvasRenderer : IRenderer
     {
         private Canvas Canvas { get; set; }
         private List<Sporter> NewVisitors { get; set; } = new List<Sporter>();
