@@ -35,11 +35,11 @@ namespace UI
             }
             MainWindow.lb_amountOfLabs.Content = $"Aantal rondes: {Logger.GetAmountOfLaps()}";
             MainWindow.sp_moves.Children.Clear();
-            foreach (string move in Logger.GetUniqueMoves())
+            foreach (IMoves move in Logger.GetUniqueMoves())
             {
                 Label label = new Label
                 {
-                    Content = move,
+                    Content = move.ToString(),
                     Background = new SolidColorBrush(Colors.LightGray)
                 };
                 MainWindow.sp_moves.Children.Add(label);
