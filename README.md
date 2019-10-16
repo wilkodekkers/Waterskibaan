@@ -26,3 +26,5 @@ omdraaien, op één been skiën, en met één hand de lijn vasthouden. Iedere mo
 punten op. Een waterskiër mag meerdere rondjes achter elkaar maken, het aantal rondjes dat hij nog
 te gaan heeft, wordt bijgehouden. Hieronder zie je een en ander weergegeven in een domeinmodel
 in de vorm van een UML-klassendiagram.
+
+![alt text](https://i.imgur.com/UgViLt9.png)
