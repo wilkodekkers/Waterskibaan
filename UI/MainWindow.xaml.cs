@@ -62,7 +62,8 @@ namespace UI
             {
                 Label label = new Label
                 {
-                    Content = move
+                    Content = move,
+                    Background = new SolidColorBrush(Colors.LightGray)
                 };
                 sp_moves.Children.Add(label);
             }

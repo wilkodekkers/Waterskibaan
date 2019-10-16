@@ -9,7 +9,7 @@ namespace Waterskibaan
 
         public bool IsStartPositieLeeg()
         {
-            return Lijnen.FirstOrDefault() == null || Lijnen.First().PositieOpDeKabel != 0;
+            return Lijnen.FirstOrDefault() == null || Lijnen.All(l => l.PositieOpDeKabel != 0);
         }
 
         public void NeemLijnInGebruik(Lijn lijn)
