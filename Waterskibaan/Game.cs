@@ -125,13 +125,13 @@ namespace Waterskibaan
             {
                 var laps = 0;
                 var uniqueMoves = new List<string>();
-                var amountOfRedClothing = 0;
 
                 _logger.Visitors.ForEach(x => laps += Math.Abs(x.AantalRondenNogTeGaan));
                 _waterskibaan.Kabel.Lijnen.ToList().ForEach(line => line.Sporter.Moves.ForEach(move => uniqueMoves.Add(move.ToString())));
                 uniqueMoves = uniqueMoves.Distinct().ToList();
 
                 data += $"Hoogste score: {_logger.Visitors.Max(x => x.Score)}\n";
+
                 data += "Aantal bezoekers met rode kleding: " + String.Join("", _logger.Visitors.Where(s =>
                 {
                     Color color = Color.FromRgb(s.KledingKleur.Item1, s.KledingKleur.Item2, s.KledingKleur.Item3);
