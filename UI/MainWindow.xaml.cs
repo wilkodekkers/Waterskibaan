@@ -25,7 +25,7 @@ namespace UI
 
             _dispatcherTimer = new DispatcherTimer(DispatcherPriority.Normal)
             {
-                Interval = TimeSpan.FromMilliseconds(100)
+                Interval = TimeSpan.FromMilliseconds(1000)
             };
 
             _canvasRenderer = new CanvasRenderer(canvas, _game);
@@ -42,6 +42,7 @@ namespace UI
         {
             _canvasRenderer.Render();
             _dataRenderer.Render();
+            label.Content =  $"Voorraad: {_game._waterskibaan.LijnenVoorraad.GetCount()}";
         }
 
         private void Bt_start_Click(object sender, RoutedEventArgs e)

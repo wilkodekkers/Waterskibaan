@@ -5,7 +5,7 @@ namespace Waterskibaan
 {
     public class Game
     {
-        private readonly Waterskibaan _waterskibaan = new Waterskibaan();
+        public readonly Waterskibaan _waterskibaan = new Waterskibaan();
         private readonly WachtrijInstructie _wachtrijInstrucie = new WachtrijInstructie();
         private readonly InstructieGroep _instructieGroep = new InstructieGroep();
         private readonly WachtrijStarten _wachtrijStarten = new WachtrijStarten();

@@ -5,7 +5,7 @@ namespace Waterskibaan
     public class Waterskibaan
     {
         public Kabel Kabel { get; set; } = new Kabel();
-        private LijnenVoorraad LijnenVoorraad { get; set; } = new LijnenVoorraad();
+        public LijnenVoorraad LijnenVoorraad { get; set; } = new LijnenVoorraad();
 
         public Waterskibaan()
         {

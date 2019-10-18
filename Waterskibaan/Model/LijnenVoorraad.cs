@@ -11,6 +11,11 @@ namespace Waterskibaan
             Lijnen = new Queue<Lijn>();
         }
 
+        public int GetCount()
+        {
+            return Lijnen.Count;
+        }
+
         public void LijnToevoegenAanRij(Lijn lijn)
         {
             Lijnen.Enqueue(lijn);
